@@ -4,7 +4,7 @@ from operations.mongo_operation import mongoOperation
 from operations.common_operations import commonOperation
 from utils.constant import constant_dict
 import os, json
-from flask import (Flask, render_template, request, session, send_file, jsonify, send_from_directory)
+from flask import (Flask, render_template, request, flash, session, send_file, jsonify, send_from_directory)
 from flask_cors import CORS
 from datetime import datetime, date
 import uuid
@@ -194,14 +194,74 @@ client = mongoOperation().mongo_connect(get_mongourl=constant_dict.get("mongo_ur
 #         return response_data
 #
 #
+
 @app.route("/", methods=["GET", "POST"])
 def login():
+    try:
+        if request.method=="POST":
+            email = request.form["email"]
+            password = request.form["password"]
+            all_data = list(mongoOperation().get_spec_data_from_coll(client, "car_rental", "login_data", {"email": email, "password": password}))
+            if all_data:
+                is_active = all_data[0]["is_active"]
+                if is_active:
+                    user_type = all_data[0]["type"]
+                    if user_type=="company":
+                        return redirect("/company_dashboard")
+                    elif user_type=="driver":
+                        return redirect("/driver_dashboard")
+                    elif user_type=="employee":
+                        return redirect("/employee_dashboard")
+                    else:
+                        return redirect("/dashboard")
+                else:
+                    flash("Please active your account")
+                    return redirect("/")
+            else:
+                flash("Please enter correct credentials")
+                return redirect("/")
+        else:
+            return render_template("login.html")
+
+    except Exception as e:
+        print(f"{datetime.now()}: Error in login route: {str(e)}")
+        return render_template("login.html")
+
+@app.route("/dashboard", methods=["GET", "POST"])
+def dashboard():
     try:
         return render_template("index.html")
 
     except Exception as e:
         print(f"{datetime.now()}: Error in login route: {str(e)}")
         return render_template("index.html")
+
+@app.route("/driver_dashboard", methods=["GET", "POST"])
+def driver_dashboard():
+    try:
+        return render_template("driver_dashboard.html")
+
+    except Exception as e:
+        print(f"{datetime.now()}: Error in login route: {str(e)}")
+        return render_template("driver_dashboard.html")
+
+@app.route("/employee_dashboard", methods=["GET", "POST"])
+def employee_dashboard():
+    try:
+        return render_template("employee_dashboard.html")
+
+    except Exception as e:
+        print(f"{datetime.now()}: Error in login route: {str(e)}")
+        return render_template("employee_dashboard.html")
+
+@app.route("/company_dashboard", methods=["GET", "POST"])
+def company_dashboard():
+    try:
+        return render_template("company_dashboard.html")
+
+    except Exception as e:
+        print(f"{datetime.now()}: Error in login route: {str(e)}")
+        return render_template("company_dashboard.html")
 
 @app.route("/company", methods=["GET", "POST"])
 def company():
@@ -231,9 +291,19 @@ def company():
                 "password": password,
                 "address": address,
                 "is_active": True,
+                "type": "company",
+                "created_at": datetime.utcnow()
+            }
+            login_mapping_dict = {
+                "id": company_id,
+                "email": email,
+                "password": password,
+                "is_active": True,
+                "type": "company",
                 "created_at": datetime.utcnow()
             }
             mongoOperation().insert_data_from_coll(client, "car_rental", "company_data", mapping_dict)
+            mongoOperation().insert_data_from_coll(client, "car_rental", "login_data", login_mapping_dict)
             return redirect("/company")
         else:
             return render_template("company_data.html", updated_company_data=updated_company_data)
@@ -241,6 +311,131 @@ def company():
     except Exception as e:
         print(f"{datetime.now()}: Error in company data route: {str(e)}")
         return render_template("company_data.html")
+
+@app.route("/superadmin", methods=["GET", "POST"])
+def superadmin():
+    try:
+        all_superadmin_data = (mongoOperation().get_all_data_from_coll(client, "car_rental", "superadmin_data"))
+        updated_superadmin_data = []
+        for superadmin_data in all_superadmin_data:
+            del superadmin_data["_id"]
+            updated_superadmin_data.append(superadmin_data)
+
+        if request.method=="POST":
+            name = request.form.get("name")
+            email = request.form.get("email")
+            password = request.form.get("password")
+            superadmin_id = str(uuid.uuid4())
+            mapping_dict = {
+                "id": superadmin_id,
+                "name": name,
+                "email": email,
+                "password": password,
+                "is_active": True,
+                "type": "superadmin",
+                "created_at": datetime.utcnow()
+            }
+            login_mapping_dict = {
+                "id": superadmin_id,
+                "email": email,
+                "password": password,
+                "is_active": True,
+                "type": "superadmin",
+                "created_at": datetime.utcnow()
+            }
+            mongoOperation().insert_data_from_coll(client, "car_rental", "superadmin_data", mapping_dict)
+            mongoOperation().insert_data_from_coll(client, "car_rental", "login_data", login_mapping_dict)
+            return redirect("/superadmin")
+        else:
+            return render_template("superadmin.html", updated_superadmin_data=updated_superadmin_data)
+
+    except Exception as e:
+        print(f"{datetime.now()}: Error in superadmin data route: {str(e)}")
+        return render_template("superadmin.html")
+
+@app.route("/vehical", methods=["GET", "POST"])
+def vehical():
+    try:
+        all_vehical_data = (mongoOperation().get_all_data_from_coll(client, "car_rental", "vehical_data"))
+        updated_vehical_data = []
+        for vehical_data in all_vehical_data:
+            del vehical_data["_id"]
+            updated_vehical_data.append(vehical_data)
+
+        if request.method=="POST":
+            vehical_name = request.form.get("vehical_name")
+            vehical_type = request.form.get("vehical_type")
+            number_plat = request.form.get("number_plat")
+            seating_capsity = request.form.get("seating_capsity")
+            vehical_id = str(uuid.uuid4())
+            mapping_dict = {
+                "id": vehical_id,
+                "vehical_name": vehical_name,
+                "vehical_type": vehical_type,
+                "number_plat": number_plat,
+                "seating_capsity": int(seating_capsity),
+                "is_ride": False,
+                "is_active": True,
+                "type": "vehical",
+                "created_at": datetime.utcnow()
+            }
+
+            mongoOperation().insert_data_from_coll(client, "car_rental", "vehical_data", mapping_dict)
+            return redirect("/vehical")
+        else:
+            return render_template("vehical.html", updated_vehical_data=updated_vehical_data)
+
+    except Exception as e:
+        print(f"{datetime.now()}: Error in vehical data route: {str(e)}")
+        return render_template("vehical.html")
+
+@app.route("/driver", methods=["GET", "POST"])
+def driver():
+    try:
+        all_driver_data = (mongoOperation().get_all_data_from_coll(client, "car_rental", "driver_data"))
+        updated_driver_data = []
+        for driver_data in all_driver_data:
+            del driver_data["_id"]
+            updated_driver_data.append(driver_data)
+
+        if request.method=="POST":
+            driver_name = request.form.get("driver_name")
+            email = request.form.get("email")
+            phone = request.form.get("phone")
+            password = request.form.get("password")
+            driving_licence_no = request.form.get("driving_licence_no")
+
+            driver_id = str(uuid.uuid4())
+            mapping_dict = {
+                "id": driver_id,
+                "driver_name": driver_name,
+                "email": email,
+                "phone": phone,
+                "password": password,
+                "driving_licence": driving_licence_no,
+                "is_ride": False,
+                "is_active": True,
+                "type": "driver",
+                "created_at": datetime.utcnow()
+            }
+            login_mapping_dict = {
+                "id": driver_id,
+                "email": email,
+                "password": password,
+                "is_active": True,
+                "type": "driver",
+                "created_at": datetime.utcnow()
+            }
+            mongoOperation().insert_data_from_coll(client, "car_rental", "driver_data", mapping_dict)
+            mongoOperation().insert_data_from_coll(client, "car_rental", "login_data", login_mapping_dict)
+            return redirect("/driver")
+        else:
+            return render_template("driver.html", all_driver_data=all_driver_data)
+
+    except Exception as e:
+        print(f"{datetime.now()}: Error in driver data route: {str(e)}")
+        return render_template("driver.html")
+
 
 #
 # @app.route("/quickoo/forgot-password", methods=["POST"])

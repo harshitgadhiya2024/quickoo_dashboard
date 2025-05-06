@@ -120,7 +120,7 @@
               <div data-i18n="Email">Superadmin</div>
             </a>
           </li>
-          <li class="menu-item active">
+          <li class="menu-item">
             <a href="/company" class="menu-link">
               <i class="menu-icon tf-icons bx bx-building-house"></i>
               <div data-i18n="Email">Company</div>
@@ -132,7 +132,7 @@
               <div data-i18n="Email">Driver</div>
             </a>
           </li>
-          <li class="menu-item">
+          <li class="menu-item active">
             <a href="/vehical" class="menu-link">
               <i class="menu-icon tf-icons bx bx-car"></i>
               <div data-i18n="Email">Vehical</div>
@@ -517,7 +517,7 @@
               <div class="row mx-2 card-header">
                 <div class="col-md-4">
                   <div class="me-5">
-                    <h3>Company Data</h3>
+                    <h3>Vehical Data</h3>
                   </div>
                 </div>
                 <div class="col-md-8">
@@ -526,7 +526,7 @@
                     <div class="dt-buttons">
                       <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                         data-bs-target="#onboardHorizontalImageModal">
-                        <i class="bx bx-plus me-0 me-lg-2"></i> Add Company
+                        <i class="bx bx-plus me-0 me-lg-2"></i> Add Vehical
                       </button>
                     </div>
                   </div>
@@ -538,33 +538,30 @@
                   <thead>
                     <tr class="text-nowrap">
                       <th>ID</th>
-                      <th>Company name</th>
-                      <th>GST No</th>
-                      <th>Pancard</th>
-                      <th>Company Details</th>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Licence plat</th>
+                      <th>Seating Number</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody class="table-border-bottom-0">
-                    {% for data in updated_company_data %}
+                    {% for data in updated_vehical_data %}
                     <tr>
                       <th scope="row">{{data.id}}</th>
-                      <td>{{data["company_name"]}}</td>
-                      <td>{{data["GST No"]}}</td>
-                      <td>{{data["Pancard"]}}</td>
-                      <td>
-                        <div class="d-inline-block text-nowrap">
-                          <a href="tel:+916356665365" class="btn btn-sm btn-primary"><i class="bx bx-phone"></i></a>
-                          <a href="mailto:info@stylic.ai" class="btn btn-sm btn-primary"><i class="bx bx-envelope"></i></a>
-                          <a href="https://stylic.ai/contact-us" class="btn btn-sm btn-primary"><i class="bx bx-location-plus"></i></a>
-                        </div>
-                      </td>
+                      <td>{{data["vehical_name"]}}</td>
+                      <td>{{data["vehical_type"]}}</td>
+                      <td>{{data["number_plat"]}}</td>
+                      <td>{{data["seating_capsity"]}}</td>
                       <td>
                         <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false"><i class="bx bx-dots-vertical-rounded"></i></button>
+                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"
+                            aria-expanded="false"><i class="bx bx-dots-vertical-rounded"></i></button>
                           <div class="dropdown-menu">
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Delete</a>
+                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-1"></i>
+                              Edit</a>
+                            <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i>
+                              Delete</a>
                           </div>
                         </div>
                       </td>
@@ -600,64 +597,43 @@
     aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content text-center">
-        <form type="post" method="post" action="/company" enctype="multipart/form-data">
+        <form type="post" method="post" action="/vehical" enctype="multipart/form-data">
           <div class="modal-header">
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             </button>
           </div>
           <div class="modal-body onboarding-horizontal p-0 text-center">
             <div class="mb-0" style="width: 100% !important; padding: 0 40px;">
-              <h4 class="onboarding-title text-body">Add Company</h4>
+              <h4 class="onboarding-title text-body">Add Vehical</h4>
               <div class="onboarding-info">In this example you can see a form where you can request some additional
                 information from the customer when they land on the app page.</div><br><br>
               <div class="row">
                 <div class="col-sm-6">
                   <div class="mb-3">
-                    <label for="nameEx7" class="form-label">Company Name <span style="color: red;">*</span></label>
-                    <input class="form-control" name="company_name" placeholder="Enter your company name..." type="text"
+                    <label for="nameEx7" class="form-label">Vehical Name <span style="color: red;">*</span></label>
+                    <input class="form-control" name="vehical_name" placeholder="Enter your vehical name..." type="text"
                       value="" tabindex="0" id="nameEx7" required>
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="mb-3">
-                    <label for="namesdfsEx7" class="form-label">Email  <span style="color: red;">*</span></label>
-                    <input class="form-control" name="email" placeholder="Enter your company email..." type="email"
+                    <label for="nameEx7" class="form-label">Vehical Type <span style="color: red;">*</span></label>
+                    <input class="form-control" name="vehical_type" placeholder="Enter your vehical type..." type="text"
+                      value="" tabindex="0" id="nameEx7" required>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="mb-3">
+                    <label for="namesdfsEx7" class="form-label">Number Plat No <span style="color: red;">*</span></label>
+                    <input class="form-control" name="number_plat" placeholder="Enter your number plat..." type="text"
                       value="" tabindex="0" id="namesdfsEx7" required>
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="mb-3">
-                    <label for="namsdfdsfeEx7" class="form-label">Phone  <span style="color: red;">*</span></label>
-                    <input class="form-control" name="phone" placeholder="Enter your company phone number..."
-                      type="text" value="" tabindex="0" id="namsdfdsfeEx7" required>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="mb-3">
-                    <label for="nsfsafameEx7" class="form-label">Pancard</label>
-                    <input class="form-control" name="pancard" placeholder="Enter your company pancard..." type="text"
-                      value="" tabindex="0" id="nsfsafameEx7">
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="mb-3">
-                    <label for="naafafmeEx7" class="form-label">GST No</label>
-                    <input class="form-control" name="gst_no" placeholder="Enter your company GST No..." type="text"
-                      value="" tabindex="0" id="naafafmeEx7">
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="mb-3">
-                    <label for="nameEx75667" class="form-label">Address</label>
-                    <input class="form-control" name="address" placeholder="Enter your company address" type="text"
-                      value="" tabindex="0" id="nameEx75667">
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="mb-3">
-                    <label for="nameEx111" class="form-label">Password <span style="color: red;">*</span></label>
-                    <input class="form-control" name="password" placeholder="Enter your password" type="password"
-                      value="" tabindex="0" id="nameEx111">
+                    <label for="namesdfsEx7" class="form-label">Seating Capicity <span style="color: red;">*</span></label>
+                    <input class="form-control" name="seating_capsity" placeholder="Enter seating capicity..." type="number"
+                      value="" tabindex="0" id="namesdfsEx7" required>
                   </div>
                 </div>
               </div>
@@ -704,9 +680,6 @@
   <script src="/static/assets/js/app-user-list.js"></script>
 
 </body>
-
-
-<!-- Mirrored from demos.pixinvent.com/frest-html-admin-template/html/vertical-menu-template/app-user-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 06 May 2025 06:33:24 GMT -->
 
 </html>
 
