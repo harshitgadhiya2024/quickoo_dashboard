@@ -8,7 +8,7 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Booking Details</title>
+    <title>Driver Details</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/static/favicon.png" />
@@ -74,7 +74,7 @@
                             <div data-i18n="Dashboard">Dashboard</div>
                         </a>
                     </li>
-                    <li class="menu-item active">
+                    <li class="menu-item">
                         <a href="/booking_details" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-calendar"></i>
                             <div data-i18n="Booking Details">Booking Details</div>
@@ -86,7 +86,7 @@
                             <div data-i18n="Vender Details">Vender Details</div>
                         </a>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item active">
                         <a href="/driver_details" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-user"></i>
                             <div data-i18n="Driver Details">Driver Details</div>
@@ -170,10 +170,10 @@
                     <div class="container-xxl flex-grow-1 container-p-y">
                         <div class="card">
                             <div class="card-header" style="margin-bottom: 20px;">
-                                <h5 style="float: inline-start; font-size: 24px; padding-top: 10px;">Booking Details
+                                <h5 style="float: inline-start; font-size: 24px; padding-top: 10px;">Driver Details
                                 </h5>
                                 <button type="button" style="float: inline-end;" class="btn btn-primary"
-                                    data-bs-toggle="modal" data-bs-target="#addBooking"> Add Booking </button>
+                                    data-bs-toggle="modal" data-bs-target="#adddriver"> Add Driver </button>
                             </div>
                             <div class="card-body">
                                 {% if is_data %}
@@ -182,73 +182,81 @@
                                         <thead>
                                             <tr class="text-nowrap">
                                                 <th>ID</th>
-                                                <th>Driver ID</th>
-                                                <th>Full Name</th>
-                                                <th>Phone</th>
+                                                <th>Driver Name</th>
                                                 <th>Email</th>
-                                                <th>Pickup</th>
-                                                <th>Drop</th>
-                                                <th>Date</th>
-                                                <th>Time</th>
-                                                <th>Service Type</th>
-                                                <th>Shoffr Class</th>
-                                                <th>Flight Info</th>
-                                                <th>bag Info</th>
-                                                <th>Note</th>
-                                                <th>Created</th>
-                                                <th>Updated</th>
+                                                <th>Phone</th>
+                                                <th>PCO licence number</th>
+                                                <th>National insurance number</th>
+                                                <th>PCO vehicle licence</th>
+                                                <th>Car register number</th>
+                                                <th>PCO Expire date</th>
+                                                <th>PCO Vehicle Expire date</th>
+                                                <th>Driving Licence</th>
+                                                <th>Insurance certificate url</th>
+                                                <th>Vehicle Photos</th>
+                                                <th>Assigned</th>
+                                                <th>Created At</th>
+                                                <th>Updated At</th>
                                                 <th>Action</th>
-                                                <th>Assignment</th>
                                             </tr>
                                         </thead>
                                         <tbody class="table-border-bottom-0">
                                             {% for data in all_data %}
                                             <tr>
                                                 <th scope="row">{{data["id"]}}</th>
-                                                <td>{{data["driver_id"]}}</td>
-                                                <td>{{data["full_name"]}}</td>
-                                                <td>{{data["phone"]}}</td>
+                                                <td>{{data["drivername"]}}</td>
                                                 <td>{{data["email"]}}</td>
-                                                <td>{{data["pickup"]}}</td>
-                                                <td>{{data["drop"]}}</td>
-                                                <td>{{data["date"]}}</td>
-                                                <td>{{data["time"]}}</td>
-                                                <td>{{data["service_type"]}}</td>
-                                                <td>{{data["shoffr_class"]}}</td>
-                                                <td>{{data["flight_info"]}}</td>
-                                                <td>{{data["bag_info"]}}</td>
-                                                <td>{{data["note"]}}</td>
+                                                <td>{{data["phone"]}}</td>
+                                                <td>{{data["pco_licence_number"]}}</td>
+                                                <td>{{data["national_insurance_number"]}}</td>
+                                                <td>{{data["pco_vehicle_licence"]}}</td>
+                                                <td>{{data["car_register_number"]}}</td>
+                                                <td>{{data["pco_expire_date"]}}</td>
+                                                <td>{{data["pco_vehicle_expire_date"]}}</td>
+                                                <td><a href='{{data["driving_licence_url"]}}'><img src='{{data["driving_licence_url"]}}' width="80" height="80" style="border-radius: 50%;"></img></a></td>
+                                                <td><a href='{{data["insurance_certificate_url"]}}'><img src='{{data["insurance_certificate_url"]}}' width="80" height="80" style="border-radius: 50%;"></img></a></td>
+                                                <td>
+                                                    <div class="vehicle-images" style="display: inline-flex;">
+                                                        {% for vehicle_url in data["vehicle_photos_urls"] %}
+                                                        <a href='{{vehicle_url}}'><img src='{{ vehicle_url }}' width="80" height="80" style="border-radius: 50%; margin-right: 10px;"></img></a>
+                                                        {% endfor %}
+                                                    </div>
+                                                <td>{{data["is_assign"]}}</td>
                                                 <td>{{data["created_at"]}}</td>
                                                 <td>{{data["updated_at"]}}</td>
                                                 <td>
-                                                    {% if status_mapping and data.status in status_mapping %}
-                                                    <div class="dropdown">
-                                                        <button
-                                                            class="btn {{ status_mapping[data.status].color }} dropdown-toggle"
-                                                            type="button" data-bs-toggle="dropdown">
-                                                            {{ data.status.replace('_', ' ').title() }}
+                                                    <div class="button-group" style="display: inline-flex;">
+                                                        <div class="dropdown" style="margin-right: 10px;">
+                                                            <button
+                                                                class="btn {{ status_mapping[data.status].color }} dropdown-toggle"
+                                                                type="button" data-bs-toggle="dropdown">
+                                                                {{ data.status.replace('_', ' ').title() }}
+                                                            </button>
+                                                            <ul class="dropdown-menu">
+                                                                {% for status in status_mapping[data.status].status_list
+                                                                %}
+                                                                <li>
+                                                                    <a class="dropdown-item"
+                                                                        href="/driver-status-update?uid={{ data.id }}&status={{ status_mapping[data.status].status }}">
+                                                                        {{ status.replace('_', ' ').title() }}
+                                                                    </a>
+                                                                </li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                        <button class="btn btn-sm btn-warning edit-driver-btn"
+                                                            data-bs-toggle="modal" data-bs-target="#editdriver"
+                                                           data-id="{{ data.id }}"
+                                                           data-drivername="{{ data.drivername }}"
+                                                           data-email="{{data.email}}"
+                                                           data-phone="{{data.phone}}"
+                                                           data-pco_licence_number="{{data.pco_licence_number}}"
+                                                           data-national_insurance_number="{{data.national_insurance_number}}"
+                                                           data-pco_vehicle_licence="{{data.pco_vehicle_licence}}"
+                                                           data-car_register_number="{{data.car_register_number}}">
+                                                            <i class="menu-icon tf-icons bx bx-edit"></i>Edit
                                                         </button>
-                                                        <ul class="dropdown-menu">
-                                                            {% for status in status_mapping[data.status].status_list %}
-                                                            <li>
-                                                                <a class="dropdown-item"
-                                                                    href="/ride-status-update?uid={{ data.id }}&status={{ status }}">
-                                                                    {{ status.replace('_', ' ').title() }}
-                                                                </a>
-                                                            </li>
-                                                            {% endfor %}
-                                                        </ul>
                                                     </div>
-                                                    {% else %}
-                                                    <span class="text-muted">No actions</span>
-                                                    {% endif %}
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-primary assign-driver-btn"
-                                                        data-bs-toggle="modal" data-bs-target="#driverModal"
-                                                        data-id="{{ data.id }}">
-                                                        Assign Driver
-                                                    </button>
                                                 </td>
                                             </tr>
                                             {% endfor %}
@@ -262,26 +270,12 @@
                                         <div class="card">
                                             <div class="card-body text-center">
                                                 <h2 class="mb-1">Add Data</h2>
-                                                <span class="text-muted">We don't have any booking data</span>
+                                                <span class="text-muted">We don't have any Driver data</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-1 col-12 mb-4"></div>
                                 </div>
-                                <!-- <div class="card mb-4">
-                                    <div class="card-header header-elements">
-                                        <span class=" me-2">Card Header</span>
-                                        <div class="card-header-elements ms-auto">
-                                            <span class="tf-icon bx bx-bell text-muted"></span>
-                                            <span class="text text-muted d-flex">
-                                                <small>Sample Text</small>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <p class="card-text">Sample card header with text.</p>
-                                    </div>
-                                </div> -->
                                 {% endif %}
                             </div>
                         </div>
@@ -306,21 +300,21 @@
         <!-- Drag Target Area To SlideIn Menu On Small Screens -->
         <div class="drag-target"></div>
         <!-- / Layout wrapper -->
-        <div class="modal fade" id="addBooking" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-simple modal-add-booking">
+        <div class="modal fade" id="adddriver" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-simple modal-add-driver">
                 <div class="modal-content p-3 p-md-5">
                     <div class="modal-body">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div class="text-center mb-4">
-                            <h3>Add Booking</h3>
-                            <p>Add booking details will receive a data</p>
+                            <h3>Add Driver</h3>
+                            <p>Add Driver details will receive a data</p>
                         </div>
-                        <form method="POST" action="/add-ride-booking" class="row g-3">
+                        <form method="POST" action="/add-driver" enctype="multipart/form-data" class="row g-3">
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="fullname">Full Name <span
+                                <label class="form-label" for="drivername">Driver Name <span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <input type="text" id="fullname" name="fullname" class="form-control"
-                                    placeholder="John Doe" required />
+                                <input type="text" id="drivername" name="drivername" class="form-control"
+                                    placeholder="Enter driver name" required />
                             </div>
                             <div class="col-12 col-md-6">
                                 <label class="form-label" for="modalEditUserPhone">Phone Number <span
@@ -338,64 +332,53 @@
                                     placeholder="example@domain.com" required />
                             </div>
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="service_type">Service Type <span
+                                <label class="form-label" for="pco_licence_number">PCO licence number<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <select id="service_type" name="service_type" class="form-select"
-                                    aria-label="Default select example" required>
-                                    <option selected>Airports</option>
-                                    <option>City To City</option>
-                                    <option>City Tours</option>
-                                    <option>Events</option>
-                                    <option>Seaports</option>
-                                    <option>Private Jets</option>
-                                    <option>Business</option>
-                                    <option>Weddings</option>
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label" for="pickup">Pickup <span
-                                        style="color: red; font-size: 18px;">*</span></label>
-                                <input type="text" id="pickup" name="pickup" class="form-control"
-                                    placeholder="Enter Pickup" required />
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label" for="drop">Drop <span
-                                        style="color: red; font-size: 18px;">*</span></label>
-                                <input type="text" id="drop" name="drop" class="form-control" placeholder="Enter Drop"
-                                    required />
+                                <input type="text" id="pco_licence_number" name="pco_licence_number" class="form-control"
+                                    placeholder="Enter PCO licence number" required />
                             </div>
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="shoffr_class">Shoffr class <span
+                                <label class="form-label" for="national_insurance_number">National insurance number<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <select id="shoffr_class" name="shoffr_class" class="form-select"
-                                    aria-label="Default select example" required>
-                                    <option selected>Business</option>
-                                    <option>Van</option>
-                                </select>
+                                <input type="text" id="national_insurance_number" name="national_insurance_number" class="form-control"
+                                    placeholder="Enter national insurance number" required />
                             </div>
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="pickupdate">Date <span
+                                <label class="form-label" for="pco_vehicle_licence">PCO vehicle licence<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <input type="date" id="pickupdate" name="pickupdate" class="form-control" required />
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <label class="form-label" for="pickuptime">Time <span
-                                        style="color: red; font-size: 18px;">*</span></label>
-                                <input type="time" id="pickuptime" name="pickuptime" class="form-control" required />
-                            </div>
-                            <div class="col-12 col-md-6">
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <label for="flightinfo" class="form-label">Flight Info</label>
-                                <textarea class="form-control" id="flightinfo" name="flightinfo" rows="3"></textarea>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <label for="baginfo" class="form-label">Bags Info</label>
-                                <textarea class="form-control" id="baginfo" name="baginfo" rows="3"></textarea>
+                                <input type="text" id="pco_vehicle_licence" name="pco_vehicle_licence" class="form-control"
+                                    placeholder="Enter PCO vehicle licence" required />
                             </div>
                             <div class="col-12 col-md-12">
-                                <label for="note" class="form-label">Note</label>
-                                <textarea class="form-control" id="note" name="note" rows="3"></textarea>
+                                <label class="form-label" for="car_register_number">Car register number<span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="car_register_number" name="car_register_number" class="form-control"
+                                    placeholder="Enter car register number" required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="pco_expire_date">PCO Expire Date<span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="date" id="pco_expire_date" name="pco_expire_date" class="form-control" required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="pco_vehicle_expire_date">PCO Vehicle Expire Date<span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="date" id="pco_vehicle_expire_date" name="pco_vehicle_expire_date" class="form-control" required />
+                            </div>
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="driving_licence">Driving Licence<span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="file" id="driving_licence" name="driving_licence" accept=".jpg, .jpeg, .png, .webp" class="form-control" required />
+                            </div>
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="insurance_certificate">Insurance Certificate<span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="file" id="insurance_certificate" name="insurance_certificate" accept=".jpg, .jpeg, .png, .webp" class="form-control" required />
+                            </div>
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="vehicle_photos">Vehicle Photos (Minimum 3 required)<span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="file" id="vehicle_photos" name="vehicle_photos" accept=".jpg, .jpeg, .png, .webp" multiple class="form-control" required />
                             </div>
                             <div class="col-12 text-center mt-4">
                                 <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>
@@ -408,46 +391,77 @@
             </div>
         </div>
 
-        <div class="modal fade" id="driverModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-simple modal-add-booking">
+        <div class="modal fade" id="editdriver" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-simple modal-edit-driver">
                 <div class="modal-content p-3 p-md-5">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="driverModalLabel">Driver List</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
                     <div class="modal-body">
-                        <p id="checkid" hidden></p>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Driver Name</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for driver in all_driver %}
-                                <tr>
-                                    <td>{{ driver.id }}</td>
-                                    <td>{{ driver.name }}</td>
-                                    <td><button class="btn btn-primary" onclick="getApiData('{{driver.id}}')">Assign</button></td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="driverModal" tabindex="-1" aria-labelledby="driverModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="driverModalLabel">Driver List</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
+                        <div class="text-center mb-4">
+                            <h3>Edit Driver</h3>
+                            <p>Edit Driver details will receive a data</p>
+                        </div>
+                        <form method="POST" id="driverForm" action="/edit-driver" enctype="multipart/form-data" class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="editdrivername">Driver Name <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="editdrivername" name="drivername" class="form-control"
+                                    placeholder="Enter driver name" required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="editphone">Phone Number <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">+44</span>
+                                    <input type="text" id="editphone" name="phone" class="form-control phone-number-mask"
+                                        placeholder="202 555 0111" required />
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="editemail">Email <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="editemail" name="email" class="form-control"
+                                    placeholder="example@domain.com" required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="editpco_licence_number">PCO licence number<span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="editpco_licence_number" name="pco_licence_number" class="form-control"
+                                    placeholder="Enter PCO licence number" required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="editnational_insurance_number">National insurance number<span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="editnational_insurance_number" name="national_insurance_number" class="form-control"
+                                    placeholder="Enter national insurance number" required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="editpco_vehicle_licence">PCO vehicle licence<span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="editpco_vehicle_licence" name="pco_vehicle_licence" class="form-control"
+                                    placeholder="Enter PCO vehicle licence" required />
+                            </div>
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="editcar_register_number">Car register number<span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="editcar_register_number" name="car_register_number" class="form-control"
+                                    placeholder="Enter car register number" required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="editpco_expire_date">PCO Expire Date<span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="date" id="editpco_expire_date" name="pco_expire_date" class="form-control" />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="editpco_vehicle_expire_date">PCO Vehicle Expire Date<span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="date" id="editpco_vehicle_expire_date" name="pco_vehicle_expire_date" class="form-control" />
+                            </div>
+                            <div class="col-12 text-center mt-4">
+                                <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>
+                                <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                                    aria-label="Close">Cancel</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -495,35 +509,35 @@
         });
 
         document.addEventListener("DOMContentLoaded", function () {
-            const editButtons = document.querySelectorAll(".assign-driver-btn");
-            var pid = document.getElementById("checkid")
+            const editButtons = document.querySelectorAll(".edit-driver-btn");
+            const form = document.getElementById("driverForm");
 
             editButtons.forEach(button => {
                 button.addEventListener("click", () => {
+                    var name = button.getAttribute("data-name");
+                    var drivername = button.getAttribute("data-drivername");
+                    var email = button.getAttribute("data-email");
+                    var phone = button.getAttribute("data-phone").replace("+44", "");
+                    var pco_licence_number = button.getAttribute("data-pco_licence_number");
+                    var national_insurance_number = button.getAttribute("data-national_insurance_number");
+                    var pco_vehicle_licence = button.getAttribute("data-pco_vehicle_licence");
+                    var car_register_number = button.getAttribute("data-car_register_number");
                     var id = button.getAttribute("data-id");
-                    pid.innerText = id
+
+                    // Populate modal form
+                    document.getElementById("editdrivername").value = drivername;
+                    document.getElementById("editemail").value = email;
+                    document.getElementById("editphone").value = phone;
+                    document.getElementById("editpco_licence_number").value = pco_licence_number;
+                    document.getElementById("editnational_insurance_number").value = national_insurance_number;
+                    document.getElementById("editpco_vehicle_licence").value = pco_vehicle_licence;
+                    document.getElementById("editcar_register_number").value = car_register_number;
+
+                    // Change form action
+                    form.action = `/edit-driver?id=${id}`;
                 });
             });
         });
-
-        function getApiData(driverid) {
-            var pid = document.getElementById("checkid").innerText
-            console.log(pid);
-            var url = `/assign-driver?rideid=${pid}&driverid=${driverid}`
-
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        window.location.reload()
-                    }
-                    window.location.reload();
-                })
-                .catch(error => {
-                    console.error("Fetch error:", error);
-                    window.location.reload();
-                });
-        }
-
     </script>
 
 
