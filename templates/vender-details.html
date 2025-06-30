@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+
+<html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr"
+    data-theme="theme-default" data-assets-path="/static/assets/" data-template="vertical-menu-template">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Vender Details</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/favicon.png" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="/static/assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="/static/assets/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="/static/assets/vendor/fonts/flag-icons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="/static/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="/static/assets/vendor/css/rtl/theme-default.css"
+        class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="/static/assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="/static/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="/static/assets/vendor/libs/typeahead-js/typeahead.css" />
+    <!-- Helpers -->
+    <script src="/static/assets/vendor/js/helpers.js"></script>
+    <script src="/static/assets/js/config.js"></script>
+
+</head>
+
+<body>
+
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar  ">
+        <div class="layout-container">
+            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                <div class="app-brand demo ">
+                    <a href="/dashboard" class="app-brand-link">
+                        <span class="app-brand-logo demo">
+                            <img src="/static/favicon.png" height="30">
+                        </span>
+                        <span class="app-brand-text demo menu-text fw-bold ms-2" style="color: black;">uickoo</span>
+                    </a>
+
+                    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+                        <i class="bx menu-toggle-icon d-none d-xl-block fs-4 align-middle"></i>
+                        <i class="bx bx-x d-block d-xl-none bx-sm align-middle"></i>
+                    </a>
+                </div>
+
+
+                <div class="menu-divider mt-0  ">
+                </div>
+
+                <div class="menu-inner-shadow"></div>
+                <ul class="menu-inner py-1">
+                    <li class="menu-header small text-uppercase"><span class="menu-header-text"
+                            data-i18n="Apps & Data">Apps &amp; Data</span></li>
+                    <li class="menu-item">
+                        <a href="/dashboard" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                            <div data-i18n="Dashboard">Dashboard</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/booking_details" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-calendar"></i>
+                            <div data-i18n="Booking Details">Booking Details</div>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="/vendor_details" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-user-check"></i>
+                            <div data-i18n="Vender Details">Vender Details</div>
+                        </a>
+                    </li>
+                    <!-- <li class="menu-item">
+                        <a href="/driver_details" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-user"></i>
+                            <div data-i18n="Driver Details">Driver Details</div>
+                        </a>
+                    </li> -->
+                    <!-- <li class="menu-item">
+                        <a href="/invoice_details" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-food-menu"></i>
+                            <div data-i18n="Invoice Details">Invoice Details</div>
+                        </a>
+                    </li> -->
+                    <!-- <li class="menu-item">
+                        <a href="/setting" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-cog"></i>
+                            <div data-i18n="Settings">Settings</div>
+                        </a>
+                    </li> -->
+                </ul>
+            </aside>
+            <div class="layout-page">
+                <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme"
+                    id="layout-navbar">
+                    <div class="container-xxl">
+                        <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0   d-xl-none ">
+                            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                                <i class="bx bx-menu bx-sm"></i>
+                            </a>
+                        </div>
+                        <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+                            <ul class="navbar-nav flex-row align-items-center ms-auto">
+                                <!-- User -->
+                                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                                    <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
+                                        data-bs-toggle="dropdown">
+                                        <div class="avatar avatar-online">
+                                            <img src="/static/assets/img/avatars/1.png" alt class="rounded-circle">
+                                        </div>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item" href="pages-account-settings-account.html">
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0 me-3">
+                                                        <div class="avatar avatar-online">
+                                                            <img src="/static/assets/img/avatars/1.png" alt
+                                                                class="rounded-circle">
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <span class="fw-medium d-block lh-1">Quickoo</span>
+                                                        <small>Superadmin</small>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <div class="dropdown-divider"></div>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="/logout" target="_blank">
+                                                <i class="bx bx-power-off me-2"></i>
+                                                <span class="align-middle">Log Out</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <!--/ User -->
+
+
+                            </ul>
+                        </div>
+                        <!-- Search Small Screens -->
+                        <div class="navbar-search-wrapper search-input-wrapper container-xxl d-none">
+                            <input type="text" class="form-control search-input border-0" placeholder="Search..."
+                                aria-label="Search...">
+                            <i class="bx bx-x bx-sm search-toggler cursor-pointer"></i>
+                        </div>
+                    </div>
+                </nav>
+                <div class="content-wrapper">
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <div class="card">
+                            <div class="card-header" style="margin-bottom: 20px;">
+                                <h5 style="float: inline-start; font-size: 24px; padding-top: 10px;">Vender Details
+                                </h5>
+                                <button type="button" style="float: inline-end;" class="btn btn-primary"
+                                    data-bs-toggle="modal" data-bs-target="#addVender"> Add Vender </button>
+                            </div>
+                            <div class="card-body">
+                                {% if is_data %}
+                                <div class="table-responsive text-nowrap" style="height: 440px; overflow-y: auto;">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr class="text-nowrap">
+                                                <th>ID</th>
+                                                <th>Vendor Name</th>
+                                                <th>VAT No</th>
+                                                <th>Tax (In Persantage)</th>
+                                                <th>Created At</th>
+                                                <th>Updated At</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="table-border-bottom-0">
+                                            {% for data in all_data %}
+                                            <tr>
+                                                <th scope="row">{{data["id"]}}</th>
+                                                <td>{{data["vender_name"]}}</td>
+                                                <td>{{data["vat_no"]}}</td>
+                                                <td>{{data["tax"]}}</td>
+                                                <td>{{data["created_at"]}}</td>
+                                                <td>{{data["updated_at"]}}</td>
+                                                <td>
+                                                    <div class="button-group" style="display: inline-flex;">
+                                                        <div class="dropdown" style="margin-right: 10px;">
+                                                            <button
+                                                                class="btn {{ status_mapping[data.status].color }} dropdown-toggle"
+                                                                type="button" data-bs-toggle="dropdown">
+                                                                {{ data.status.replace('_', ' ').title() }}
+                                                            </button>
+                                                            <ul class="dropdown-menu">
+                                                                {% for status in status_mapping[data.status].status_list
+                                                                %}
+                                                                <li>
+                                                                    <a class="dropdown-item"
+                                                                        href="/vender-status-update?uid={{ data.id }}">
+                                                                        {{ status.replace('_', ' ').title() }}
+                                                                    </a>
+                                                                </li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                        <button class="btn btn-sm btn-warning edit-vendor-btn"
+                                                            data-bs-toggle="modal" data-bs-target="#editVender"
+                                                            data-name="{{ data.vender_name }}" data-id="{{ data.id }}"
+                                                            data-vat="{{ data.vat_no }}" data-tax="{{ data.tax.replace('%', '') }}">
+                                                            <i class="menu-icon tf-icons bx bx-edit"></i>Edit
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% else %}
+                                <div class="row" style="height: 440px;">
+                                    <div class="col-sm-1 col-12 mb-4"></div>
+                                    <div class="col-sm-10 col-12 mb-4">
+                                        <div class="card">
+                                            <div class="card-body text-center">
+                                                <h2 class="mb-1">Add Data</h2>
+                                                <span class="text-muted">We don't have any booking data</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1 col-12 mb-4"></div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!--/ Responsive Table -->
+
+                    </div>
+                    <!-- / Content -->
+
+                    <div class="content-backdrop fade"></div>
+                </div>
+                <!-- Content wrapper -->
+            </div>
+            <!-- / Layout page -->
+        </div>
+
+
+
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+
+
+        <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+        <div class="drag-target"></div>
+        <!-- / Layout wrapper -->
+        <div class="modal fade" id="addVender" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-simple modal-add-vender">
+                <div class="modal-content p-3 p-md-5">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="text-center mb-4">
+                            <h3>Add Vender</h3>
+                            <p>Add Vender details will receive a data</p>
+                        </div>
+                        <form method="POST" action="/add-vender" class="row g-3">
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="vendername">Vender Name <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="vendername" name="vendername" class="form-control"
+                                    placeholder="Enter vender name" required />
+                            </div>
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="vatno">VAT No. <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="vatno" name="vatno" class="form-control"
+                                    placeholder="Enter VAT No" required />
+                            </div>
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="tax">Tax <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <div class="input-group input-group-merge">
+                                    <input type="number" id="Tax" name="tax" class="form-control tax-mask"
+                                        placeholder="How much?" required />
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center mt-4">
+                                <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>
+                                <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                                    aria-label="Close">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="editVender" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-simple modal-edit-vender">
+                <div class="modal-content p-3 p-md-5">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="text-center mb-4">
+                            <h3>Edit Vender</h3>
+                            <p>Edit Vender details will receive a data</p>
+                        </div>
+                        <form method="POST" id="vendorForm" action="/edit-vender" class="row g-3">
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="editvendername">Vender Name <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="editvendername" name="vendername" class="form-control"
+                                    placeholder="Enter vender name" required />
+                            </div>
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="editvendername">VAT No. <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="editvatno" name="vatno" class="form-control"
+                                    placeholder="Enter VAT No" required />
+                            </div>
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="edittax">Tax <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <div class="input-group input-group-merge">
+                                    <input type="number" id="edittax" name="tax" class="form-control tax-mask"
+                                        placeholder="How much?" required />
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center mt-4">
+                                <button type="submit" class="btn btn-primary me-sm-3 me-1">Update</button>
+                                <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                                    aria-label="Close">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1090">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="toast align-items-center text-bg-{{ category if category else 'primary' }} border-0 show"
+            role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ message }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- build:js assets/vendor/js/core.js -->
+
+    <script>
+        document.querySelectorAll('.form-password-toggle .input-group-text').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const input = toggle.parentElement.querySelector('input');
+                const icon = toggle.querySelector('i');
+
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('bx-hide');
+                    icon.classList.add('bx-show');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('bx-show');
+                    icon.classList.add('bx-hide');
+                }
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const editButtons = document.querySelectorAll(".edit-vendor-btn");
+            const form = document.getElementById("vendorForm");
+
+            editButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    var name = button.getAttribute("data-name");
+                    var vat = button.getAttribute("data-vat");
+                    var taxvalue = button.getAttribute("data-tax");
+                    var id = button.getAttribute("data-id");
+                    taxvalue = parseInt(taxvalue)
+                    console.log(name, vat, taxvalue);
+                    
+
+                    // Populate modal form
+                    document.getElementById("editvendername").value = name;
+                    document.getElementById("editvatno").value = vat;
+                    document.getElementById("edittax").value = taxvalue;
+
+                    // Change form action
+                    form.action = `/edit-vender?id=${id}`;
+                });
+            });
+        });
+    </script>
+
+
+    <script src="/static/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="/static/assets/vendor/libs/popper/popper.js"></script>
+    <script src="/static/assets/vendor/js/bootstrap.js"></script>
+    <script src="/static/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="/static/assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="/static/assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="/static/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script src="/static/assets/vendor/js/menu.js"></script>
+
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+
+
+
+    <!-- Main JS -->
+    <script src="/static/assets/js/main.js"></script>
+</body>
+
+</html>
