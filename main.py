@@ -559,6 +559,10 @@ def add_book_riding():
             "updated_at": datetime.utcnow()
         }
 
+        booking_template = htmlOperation().booking_confirmation_process(mapping_dict)
+        emailOperation().send_email(
+            validated_data["email"], "Quickoo - Booking Confirmation", booking_template
+        )
         mongoOperation().insert_data_from_coll(client, "quickoo_uk", "booking_data", mapping_dict)
         flash("Booking created successfully", "success")
         return redirect("/booking_details")
@@ -800,12 +804,6 @@ def add_driver():
                 'drivername': lambda x: UKDataValidator.validate_name(x, "Driver Name"),
                 'email': UKDataValidator.validate_email,
                 'phone': UKDataValidator.validate_uk_phone,
-                'pco_licence_number': lambda x: (True, x.strip()) if x and x.strip() else (
-                False, "PCO licence number is required"),
-                'national_insurance_number': UKDataValidator.validate_national_insurance,
-                'pco_vehicle_licence': lambda x: (True, x.strip()) if x and x.strip() else (
-                False, "PCO vehicle licence is required"),
-                'car_register_number': UKDataValidator.validate_vehicle_registration,
                 'pco_expire_date': lambda x: UKDataValidator.validate_date(x, "PCO Expiry Date"),
                 'pco_vehicle_expire_date': lambda x: UKDataValidator.validate_date(x, "PCO Vehicle Expiry Date"),
             }
@@ -815,10 +813,6 @@ def add_driver():
                 'drivername': request.form.get('drivername', ''),
                 'email': request.form.get('email', ''),
                 'phone': request.form.get('phone', ''),
-                'pco_licence_number': request.form.get('pco_licence_number', ''),
-                'national_insurance_number': request.form.get('national_insurance_number', ''),
-                'pco_vehicle_licence': request.form.get('pco_vehicle_licence', ''),
-                'car_register_number': request.form.get('car_register_number', ''),
                 'pco_expire_date': request.form.get('pco_expire_date', ''),
                 'pco_vehicle_expire_date': request.form.get('pco_vehicle_expire_date', ''),
             }
@@ -844,6 +838,9 @@ def add_driver():
             # Validate required files
             driving_licence = request.files.get('driving_licence')
             insurance_certificate = request.files.get('insurance_certificate')
+            pco_licence_number = request.files.get('pco_licence_number')
+            pco_vehicle_licence = request.files.get('pco_vehicle_licence')
+            driver_photo = request.files.get('driver_photo')
 
             if not driving_licence or not driving_licence.filename:
                 flash("Driving licence document is required", "danger")
@@ -853,14 +850,27 @@ def add_driver():
                 flash("Insurance certificate document is required", "danger")
                 return redirect("/driver_details")
 
+            if not pco_licence_number or not pco_licence_number.filename:
+                flash("PCO licence document is required", "danger")
+                return redirect("/driver_details")
+
+            if not pco_vehicle_licence or not pco_vehicle_licence.filename:
+                flash("PCO vehicle licence document is required", "danger")
+                return redirect("/driver_details")
+
+            if not driver_photo or not driver_photo.filename:
+                flash("Driver photo is required", "danger")
+                return redirect("/driver_details")
+
             driver_data = {
                 'drivername': validated_data['drivername'],
+                "photo":save_all_file("driver_photo"),
                 'email': validated_data['email'],
                 'phone': validated_data['phone'],
-                'pco_licence_number': validated_data['pco_licence_number'],
-                'national_insurance_number': validated_data['national_insurance_number'],
-                'pco_vehicle_licence': validated_data['pco_vehicle_licence'],
-                'car_register_number': validated_data['car_register_number'],
+                'pco_licence_number': save_all_file('pco_licence_number'),
+                'national_insurance_number': request.form['national_insurance_number'],
+                'pco_vehicle_licence': save_all_file('pco_vehicle_licence'),
+                'car_register_number': request.form.get('car_register_number', ''),
                 'pco_expire_date': validated_data['pco_expire_date'],
                 'pco_vehicle_expire_date': validated_data['pco_vehicle_expire_date'],
                 'driving_licence_url': save_all_file('driving_licence'),
@@ -916,11 +926,7 @@ def edit_driver():
             'drivername': lambda x: UKDataValidator.validate_name(x, "Driver Name"),
             'email': UKDataValidator.validate_email,
             'phone': UKDataValidator.validate_uk_phone,
-            'pco_licence_number': lambda x: (True, x.strip()) if x and x.strip() else (
-            False, "PCO licence number is required"),
             'national_insurance_number': UKDataValidator.validate_national_insurance,
-            'pco_vehicle_licence': lambda x: (True, x.strip()) if x and x.strip() else (
-            False, "PCO vehicle licence is required"),
             'car_register_number': UKDataValidator.validate_vehicle_registration,
         }
 
@@ -929,9 +935,7 @@ def edit_driver():
             'drivername': request.form.get('drivername', ''),
             'email': request.form.get('email', ''),
             'phone': request.form.get('phone', ''),
-            'pco_licence_number': request.form.get('pco_licence_number', ''),
             'national_insurance_number': request.form.get('national_insurance_number', ''),
-            'pco_vehicle_licence': request.form.get('pco_vehicle_licence', ''),
             'car_register_number': request.form.get('car_register_number', ''),
         }
 
@@ -947,9 +951,7 @@ def edit_driver():
             'drivername': validated_data['drivername'],
             'email': validated_data['email'],
             'phone': validated_data['phone'],
-            'pco_licence_number': validated_data['pco_licence_number'],
             'national_insurance_number': validated_data['national_insurance_number'],
-            'pco_vehicle_licence': validated_data['pco_vehicle_licence'],
             'car_register_number': validated_data['car_register_number'],
             "updated_at": datetime.utcnow()
         }

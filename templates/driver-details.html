@@ -75,15 +75,15 @@
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="/booking_details" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-calendar"></i>
-                            <div data-i18n="Booking Details">Booking Details</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
                         <a href="/vendor_details" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-user-check"></i>
                             <div data-i18n="Vender Details">Vender Details</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/booking_details" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-calendar"></i>
+                            <div data-i18n="Booking Details">Booking Details</div>
                         </a>
                     </li>
                     <li class="menu-item active">
@@ -183,6 +183,7 @@
                                             <tr class="text-nowrap">
                                                 <th>ID</th>
                                                 <th>Driver Name</th>
+                                                <th>Photo</th>
                                                 <th>Email</th>
                                                 <th>Phone</th>
                                                 <th>PCO licence number</th>
@@ -205,11 +206,12 @@
                                             <tr>
                                                 <th scope="row">{{data["id"]}}</th>
                                                 <td>{{data["drivername"]}}</td>
+                                                <td><a href='{{data["photo"]}}'><img src='{{data["photo"]}}' width="80" height="80" style="border-radius: 50%;"></img></a></td>
                                                 <td>{{data["email"]}}</td>
                                                 <td>{{data["phone"]}}</td>
-                                                <td>{{data["pco_licence_number"]}}</td>
+                                                <td><a href='{{data["pco_licence_number"]}}'><img src='{{data["pco_licence_number"]}}' width="80" height="80" style="border-radius: 50%;"></img></a></td>
                                                 <td>{{data["national_insurance_number"]}}</td>
-                                                <td>{{data["pco_vehicle_licence"]}}</td>
+                                                <td><a href='{{data["pco_vehicle_licence"]}}'><img src='{{data["pco_vehicle_licence"]}}' width="80" height="80" style="border-radius: 50%;"></img></a></td>
                                                 <td>{{data["car_register_number"]}}</td>
                                                 <td>{{data["pco_expire_date"]}}</td>
                                                 <td>{{data["pco_vehicle_expire_date"]}}</td>
@@ -332,22 +334,30 @@
                                     placeholder="example@domain.com" required />
                             </div>
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="pco_licence_number">PCO licence number<span
-                                        style="color: red; font-size: 18px;">*</span></label>
-                                <input type="text" id="pco_licence_number" name="pco_licence_number" class="form-control"
-                                    placeholder="Enter PCO licence number" required />
-                            </div>
-                            <div class="col-12 col-md-6">
                                 <label class="form-label" for="national_insurance_number">National insurance number<span
                                         style="color: red; font-size: 18px;">*</span></label>
                                 <input type="text" id="national_insurance_number" name="national_insurance_number" class="form-control"
                                     placeholder="Enter national insurance number" required />
                             </div>
-                            <div class="col-12 col-md-6">
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="pco_licence_number">PCO licence<span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="file" id="pco_licence_number" name="pco_licence_number" accept=".jpg, .jpeg, .png, .webp" class="form-control" required />
+                            </div>
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="pco_expire_date">PCO Licence Expire Date<span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="date" id="pco_expire_date" name="pco_expire_date" class="form-control" required />
+                            </div>
+                            <div class="col-12 col-md-12">
                                 <label class="form-label" for="pco_vehicle_licence">PCO vehicle licence<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <input type="text" id="pco_vehicle_licence" name="pco_vehicle_licence" class="form-control"
-                                    placeholder="Enter PCO vehicle licence" required />
+                                <input type="file" id="pco_vehicle_licence" name="pco_vehicle_licence" accept=".jpg, .jpeg, .png, .webp" class="form-control" required />
+                            </div>
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="pco_vehicle_expire_date">PCO Vehicle Licence Expire Date<span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="date" id="pco_vehicle_expire_date" name="pco_vehicle_expire_date" class="form-control" required />
                             </div>
                             <div class="col-12 col-md-12">
                                 <label class="form-label" for="car_register_number">Car register number<span
@@ -355,15 +365,10 @@
                                 <input type="text" id="car_register_number" name="car_register_number" class="form-control"
                                     placeholder="Enter car register number" required />
                             </div>
-                            <div class="col-12 col-md-6">
-                                <label class="form-label" for="pco_expire_date">PCO Expire Date<span
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="driver_photo">Driver Photo<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <input type="date" id="pco_expire_date" name="pco_expire_date" class="form-control" required />
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <label class="form-label" for="pco_vehicle_expire_date">PCO Vehicle Expire Date<span
-                                        style="color: red; font-size: 18px;">*</span></label>
-                                <input type="date" id="pco_vehicle_expire_date" name="pco_vehicle_expire_date" class="form-control" required />
+                                <input type="file" id="driver_photo" name="driver_photo" accept=".jpg, .jpeg, .png, .webp" class="form-control" required />
                             </div>
                             <div class="col-12 col-md-12">
                                 <label class="form-label" for="driving_licence">Driving Licence<span
@@ -423,22 +428,10 @@
                                     placeholder="example@domain.com" required />
                             </div>
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="editpco_licence_number">PCO licence number<span
-                                        style="color: red; font-size: 18px;">*</span></label>
-                                <input type="text" id="editpco_licence_number" name="pco_licence_number" class="form-control"
-                                    placeholder="Enter PCO licence number" required />
-                            </div>
-                            <div class="col-12 col-md-6">
                                 <label class="form-label" for="editnational_insurance_number">National insurance number<span
                                         style="color: red; font-size: 18px;">*</span></label>
                                 <input type="text" id="editnational_insurance_number" name="national_insurance_number" class="form-control"
                                     placeholder="Enter national insurance number" required />
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <label class="form-label" for="editpco_vehicle_licence">PCO vehicle licence<span
-                                        style="color: red; font-size: 18px;">*</span></label>
-                                <input type="text" id="editpco_vehicle_licence" name="pco_vehicle_licence" class="form-control"
-                                    placeholder="Enter PCO vehicle licence" required />
                             </div>
                             <div class="col-12 col-md-12">
                                 <label class="form-label" for="editcar_register_number">Car register number<span
@@ -518,9 +511,7 @@
                     var drivername = button.getAttribute("data-drivername");
                     var email = button.getAttribute("data-email");
                     var phone = button.getAttribute("data-phone").replace("+44", "");
-                    var pco_licence_number = button.getAttribute("data-pco_licence_number");
                     var national_insurance_number = button.getAttribute("data-national_insurance_number");
-                    var pco_vehicle_licence = button.getAttribute("data-pco_vehicle_licence");
                     var car_register_number = button.getAttribute("data-car_register_number");
                     var id = button.getAttribute("data-id");
 
@@ -528,9 +519,7 @@
                     document.getElementById("editdrivername").value = drivername;
                     document.getElementById("editemail").value = email;
                     document.getElementById("editphone").value = phone;
-                    document.getElementById("editpco_licence_number").value = pco_licence_number;
                     document.getElementById("editnational_insurance_number").value = national_insurance_number;
-                    document.getElementById("editpco_vehicle_licence").value = pco_vehicle_licence;
                     document.getElementById("editcar_register_number").value = car_register_number;
 
                     // Change form action

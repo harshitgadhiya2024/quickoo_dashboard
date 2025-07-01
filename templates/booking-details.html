@@ -74,16 +74,16 @@
                             <div data-i18n="Dashboard">Dashboard</div>
                         </a>
                     </li>
-                    <li class="menu-item active">
-                        <a href="/booking_details" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-calendar"></i>
-                            <div data-i18n="Booking Details">Booking Details</div>
-                        </a>
-                    </li>
                     <li class="menu-item">
                         <a href="/vendor_details" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-user-check"></i>
                             <div data-i18n="Vender Details">Vender Details</div>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="/booking_details" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-calendar"></i>
+                            <div data-i18n="Booking Details">Booking Details</div>
                         </a>
                     </li>
                     <li class="menu-item">
@@ -191,7 +191,7 @@
                                                 <th>Date</th>
                                                 <th>Time</th>
                                                 <th>Service Type</th>
-                                                <th>Shoffr Class</th>
+                                                <th>Vehicle Class</th>
                                                 <th>Flight Info</th>
                                                 <th>bag Info</th>
                                                 <th>Note</th>
@@ -365,11 +365,12 @@
                                     required />
                             </div>
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="shoffr_class">Shoffr class <span
+                                <label class="form-label" for="shoffr_class">Vehicle Class <span
                                         style="color: red; font-size: 18px;">*</span></label>
                                 <select id="shoffr_class" name="shoffr_class" class="form-select"
                                     aria-label="Default select example" required>
-                                    <option selected>Business</option>
+                                    <option selected>First</option>
+                                    <option>Business</option>
                                     <option>Van</option>
                                 </select>
                             </div>
