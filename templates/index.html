@@ -175,24 +175,82 @@
                             <div class="col-sm-4 col-12 mb-4">
                                 <div class="card">
                                     <div class="card-body text-center">
-                                        <h2 class="mb-1">$32,690</h2>
-                                        <span class="text-muted">Referral 40%</span>
+                                        <h2 class="mb-1">{{vender_len}}</h2>
+                                        <span class="text-muted">Total Vendors</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-12 mb-4">
                                 <div class="card">
                                     <div class="card-body text-center">
-                                        <h2 class="mb-1">$32,690</h2>
-                                        <span class="text-muted">Referral 40%</span>
+                                        <h2 class="mb-1">{{booking_len}}</h2>
+                                        <span class="text-muted">Total Bookings</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-12 mb-4">
                                 <div class="card">
                                     <div class="card-body text-center">
-                                        <h2 class="mb-1">$32,690</h2>
-                                        <span class="text-muted">Referral 40%</span>
+                                        <h2 class="mb-1">{{driver_len}}</h2>
+                                        <span class="text-muted">Total Drivers</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-12">
+                                <div class="card" style="margin-bottom: 25px;">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="card-title mb-0">Recent Booking Data</h5>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table border-top">
+                                            <thead>
+                                                <tr>
+                                                    <th>Full name</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="table-border-bottom-0">
+                                                {% for data in booking_data %}
+                                                <tr>
+                                                    <td>{{data.name}}</td>
+                                                    <td>{{data.email}}</td>
+                                                    <td>{{data.phone}}</td>
+                                                    <td>{{data.status}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="card-title mb-0">Recent Driver Data</h5>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table border-top">
+                                            <thead>
+                                                <tr>
+                                                    <th>Full name</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="table-border-bottom-0">
+                                                {% for data in driver_data %}
+                                                <tr>
+                                                    <td>{{data.name}}</td>
+                                                    <td>{{data.email}}</td>
+                                                    <td>{{data.phone}}</td>
+                                                    <td>{{data.status}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>

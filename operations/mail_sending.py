@@ -6,10 +6,10 @@ from email.mime.base import MIMEBase
 from email import encoders
 import os
 
-SMTP_SERVER = "smtp.gmail.com"  # Change if using Outlook, Yahoo, etc.
-SMTP_PORT = 587  # Use 465 for SSL, 587 for TLS
-EMAIL_ADDRESS = "gadhiyaharshit2023@gmail.com"
-EMAIL_PASSWORD = "bsxlmkiufmydlrhy"  # Use app password for Gmail
+SMTP_SERVER = "smtp.hostinger.com   "  # Change if using Outlook, Yahoo, etc.
+SMTP_PORT = 465  # Use 465 for SSL, 587 for TLS
+EMAIL_ADDRESS = "info@quickoo.co.uk"
+EMAIL_PASSWORD = "Quickoo@#2025"  # Use app password for Gmail
 
 class emailOperation():
 

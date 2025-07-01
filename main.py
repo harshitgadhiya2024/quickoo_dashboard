@@ -82,8 +82,7 @@ class UKDataValidator:
             if phone.startswith('+44') or phone.startswith('0031'):
                 parsed_number = phonenumbers.parse(phone, "NL")
                 if phonenumbers.is_valid_number(parsed_number):
-                    formatted_number = phonenumbers.format_number(parsed_number,
-                                                                  phonenumbers.PhoneNumberFormat.INTERNATIONAL)
+                    formatted_number = phonenumbers.format_number(parsed_number, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
                     return True, formatted_number
 
             return False, "Invalid Dutch phone number format"
@@ -418,7 +417,15 @@ def reset_password():
 @token_required
 def dashboard():
     try:
-        return render_template("index.html")
+        driver_data = list(mongoOperation().get_all_data_from_coll(client, "quickoo_uk", "driver_data"))[::-1]
+        booking_data = list(mongoOperation().get_all_data_from_coll(client, "quickoo_uk", "booking_data"))[::-1]
+        vender_data = list(mongoOperation().get_all_data_from_coll(client, "quickoo_uk", "vender_data"))[::-1]
+        updated_driver_data = [{"name": data["drivername"], "email": data["email"], "phone": data["phone"], "status": data["status"]} for data in driver_data[:3]]
+        updated_booking_data = [{"name": data["full_name"], "email": data["email"], "phone": data["phone"], "status": data["status"]} for data in booking_data[:3]]
+        updated_vender_data = [{"name": data["vender_name"], "email": data["email"], "phone": data["phone"], "status": data["status"]} for data in vender_data[:3]]
+
+        return render_template("index.html", driver_len=len(driver_data), booking_len=len(booking_data), vender_len=len(vender_data), driver_data=updated_driver_data,
+        vender_data=updated_vender_data, booking_data=updated_booking_data)
     except Exception as e:
         print(f"{datetime.now()}: Error in dashboard route: {str(e)}")
         return render_template("index.html")
@@ -1120,4 +1127,4 @@ def internal_error(error):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8060)
+    app.run(host="0.0.0.0", port=8060, debug=True)
