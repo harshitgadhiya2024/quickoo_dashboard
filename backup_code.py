@@ -194,8 +194,8 @@ def add_book_riding():
         baginfo = request.form.get("baginfo", "")
         note = request.form.get("note", "")
 
-        if "+44" not in phone:
-            phone = "+44 " + str(phone)
+        if "+31" not in phone:
+            phone = "+31 " + str(phone)
 
         all_company_booking_data = list(mongoOperation().get_all_data_from_coll(client, "quickoo_uk", "booking_data"))
         allids = [booking_data["id"] for booking_data in all_company_booking_data]
@@ -288,8 +288,8 @@ def add_vender():
         if "%" not in tax:
             tax = str(tax) + "%"
 
-        if "+44" not in phone:
-            phone = "+44" + str(phone)
+        if "+31" not in phone:
+            phone = "+31" + str(phone)
 
         all_vender_data = list(mongoOperation().get_all_data_from_coll(client, "quickoo_uk", "vender_data"))
         allids = [vender_data["id"] for vender_data in all_vender_data]
@@ -422,8 +422,8 @@ def add_driver():
             }
 
             phone = request.form.get('phone')
-            if "+44" not in phone:
-                phone = "+44" + phone
+            if "+31" not in phone:
+                phone = "+31" + phone
                 driver_data["phone"] = phone
 
             # Handle multiple vehicle photos
@@ -485,8 +485,8 @@ def edit_driver():
 
 
         phone = request.form.get('phone')
-        if "+44" not in phone:
-            phone = "+44" + phone
+        if "+31" not in phone:
+            phone = "+31" + phone
             driver_data["phone"] = phone
 
         mongoOperation().update_mongo_data(client, "quickoo_uk", "driver_data", {"id": uid}, driver_data)

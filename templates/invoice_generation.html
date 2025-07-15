@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+
+<html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr"
+    data-theme="theme-default" data-assets-path="/static/assets/" data-template="vertical-menu-template">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Invoice Generation</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/favicon.png" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="/static/assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="/static/assets/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="/static/assets/vendor/fonts/flag-icons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="/static/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="/static/assets/vendor/css/rtl/theme-default.css"
+        class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="/static/assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="/static/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="/static/assets/vendor/libs/typeahead-js/typeahead.css" />
+    <!-- DataTables CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs5/1.13.6/dataTables.bootstrap5.min.css"
+        rel="stylesheet">
+    <!-- Helpers -->
+    <script src="/static/assets/vendor/js/helpers.js"></script>
+    <script src="/static/assets/js/config.js"></script>
+    <!-- Custom CSS -->
+    <style>
+        .dataTables_wrapper {
+            padding: 20px;
+        }
+
+        .filter-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            margin-top: 20px;
+            padding-left: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #6c757d;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            min-width: 200px;
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+
+        .btn-reset {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar  ">
+        <div class="layout-container">
+            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                <div class="app-brand demo ">
+                    <a href="/dashboard" class="app-brand-link">
+                        <span class="app-brand-logo demo">
+                            <img src="/static/favicon.png" height="30">
+                        </span>
+                        <span class="app-brand-text demo menu-text fw-bold ms-2" style="color: black;">uickoo</span>
+                    </a>
+
+                    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+                        <i class="bx menu-toggle-icon d-none d-xl-block fs-4 align-middle"></i>
+                        <i class="bx bx-x d-block d-xl-none bx-sm align-middle"></i>
+                    </a>
+                </div>
+
+
+                <div class="menu-divider mt-0  ">
+                </div>
+
+                <div class="menu-inner-shadow"></div>
+                <ul class="menu-inner py-1">
+                    <li class="menu-header small text-uppercase"><span class="menu-header-text"
+                            data-i18n="Apps & Data">Apps &amp; Data</span></li>
+                    <li class="menu-item">
+                        <a href="/dashboard" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                            <div data-i18n="Dashboard">Dashboard</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/vendor_details" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-user-check"></i>
+                            <div data-i18n="Vender Details">Vender Details</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/booking_details" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-calendar"></i>
+                            <div data-i18n="Booking Details">Booking Details</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/driver_details" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-user"></i>
+                            <div data-i18n="Driver Details">Driver Details</div>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="/invoice_details" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-food-menu"></i>
+                            <div data-i18n="Invoice Details">Invoice Details</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="/setting" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-cog"></i>
+                            <div data-i18n="Settings">Settings</div>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+            <div class="layout-page">
+                <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme"
+                    id="layout-navbar">
+                    <div class="container-xxl">
+                        <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0   d-xl-none ">
+                            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                                <i class="bx bx-menu bx-sm"></i>
+                            </a>
+                        </div>
+                        <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+                            <ul class="navbar-nav flex-row align-items-center ms-auto">
+                                <!-- User -->
+                                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                                    <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
+                                        data-bs-toggle="dropdown">
+                                        <div class="avatar avatar-online">
+                                            <img src="/static/assets/img/avatars/1.png" alt class="rounded-circle">
+                                        </div>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item" href="pages-account-settings-account.html">
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0 me-3">
+                                                        <div class="avatar avatar-online">
+                                                            <img src="/static/assets/img/avatars/1.png" alt
+                                                                class="rounded-circle">
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <span class="fw-medium d-block lh-1">Quickoo</span>
+                                                        <small>Superadmin</small>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <div class="dropdown-divider"></div>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="/logout" target="_blank">
+                                                <i class="bx bx-power-off me-2"></i>
+                                                <span class="align-middle">Log Out</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <!--/ User -->
+
+
+                            </ul>
+                        </div>
+                        <!-- Search Small Screens -->
+                        <div class="navbar-search-wrapper search-input-wrapper container-xxl d-none">
+                            <input type="text" class="form-control search-input border-0" placeholder="Search..."
+                                aria-label="Search...">
+                            <i class="bx bx-x bx-sm search-toggler cursor-pointer"></i>
+                        </div>
+                    </div>
+                </nav>
+                <div class="content-wrapper">
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 style="float: inline-start; font-size: 24px;">Invoice Details
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="filter-section">
+                                    <div class="filter-row">
+                                        <div class="filter-group">
+                                            <label for="vehicleClassFilter">Vehicle Class</label>
+                                            <select id="vehicleClassFilter" class="form-select form-select-sm">
+                                                <option value="">All Vehicle Classes</option>
+                                            </select>
+                                        </div>
+                                        <div class="filter-group">
+                                            <label for="dateFromFilter">Updated From</label>
+                                            <input type="date" id="dateFromFilter" class="form-control form-control-sm">
+                                        </div>
+                                        <div class="filter-group">
+                                            <label for="dateToFilter">Updated To</label>
+                                            <input type="date" id="dateToFilter" class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                    <button id="resetFilters" class="btn btn-secondary btn-reset">Reset
+                                        Filters</button>
+                                </div>
+                                {% if is_data %}
+                                <div class="table-responsive text-nowrap">
+                                    <table id="ridesTable" class="table table-striped table-hover">
+                                        <thead>
+                                            <tr class="text-nowrap">
+                                                <th>ID</th>
+                                                <th>Driver ID</th>
+                                                <th>Full Name</th>
+                                                <th>Phone</th>
+                                                <th>Email</th>
+                                                <th>Pickup</th>
+                                                <th>Drop</th>
+                                                <th>Date</th>
+                                                <th>Time</th>
+                                                <th>Service Type</th>
+                                                <th>Vehicle Class</th>
+                                                <th>Flight Info</th>
+                                                <th>bag Info</th>
+                                                <th>Note</th>
+                                                <th>Created</th>
+                                                <th>Updated</th>
+                                                <th>Status</th>
+                                                <th>Invoice</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="table-border-bottom-0">
+                                            {% for data in all_data %}
+                                            <tr>
+                                                <th scope="row">{{data["id"]}}</th>
+                                                <td>{{data["driver_id"]}}</td>
+                                                <td>{{data["full_name"]}}</td>
+                                                <td>{{data["phone"]}}</td>
+                                                <td>{{data["email"]}}</td>
+                                                <td>{{data["pickup"]}}</td>
+                                                <td>{{data["drop"]}}</td>
+                                                <td>{{data["date"]}}</td>
+                                                <td>{{data["time"]}}</td>
+                                                <td>{{data["service_type"]}}</td>
+                                                <td>{{data["shoffr_class"]}}</td>
+                                                <td>{{data["flight_info"]}}</td>
+                                                <td>{{data["bag_info"]}}</td>
+                                                <td>{{data["note"]}}</td>
+                                                <td>{{data["created_at"]}}</td>
+                                                <td>{{data["updated_at"]}}</td>
+                                                <td>{{data["status"].title()}}</td>
+                                                <td>
+                                                    <button class="btn btn-primary assign-driver-btn"
+                                                        data-bs-toggle="modal" data-bs-target="#driverModal"
+                                                        data-id="{{ data.id }}">
+                                                        Download Invoice
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% else %}
+                                <div class="row" style="height: 440px;">
+                                    <div class="col-sm-1 col-12 mb-4"></div>
+                                    <div class="col-sm-10 col-12 mb-4">
+                                        <div class="card">
+                                            <div class="card-body text-center">
+                                                <h2 class="mb-1">Add Data</h2>
+                                                <span class="text-muted">We don't have any booking data</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1 col-12 mb-4"></div>
+                                </div>
+                                <!-- <div class="card mb-4">
+                                    <div class="card-header header-elements">
+                                        <span class=" me-2">Card Header</span>
+                                        <div class="card-header-elements ms-auto">
+                                            <span class="tf-icon bx bx-bell text-muted"></span>
+                                            <span class="text text-muted d-flex">
+                                                <small>Sample Text</small>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">Sample card header with text.</p>
+                                    </div>
+                                </div> -->
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!--/ Responsive Table -->
+
+                    </div>
+                    <!-- / Content -->
+
+                    <div class="content-backdrop fade"></div>
+                </div>
+                <!-- Content wrapper -->
+            </div>
+            <!-- / Layout page -->
+        </div>
+
+
+
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+
+
+        <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+        <div class="drag-target"></div>
+        <!-- / Layout wrapper -->
+        <div class="modal fade" id="addBooking" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-simple modal-add-booking">
+                <div class="modal-content p-3 p-md-5">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="text-center mb-4">
+                            <h3>Add Booking</h3>
+                            <p>Add booking details will receive a data</p>
+                        </div>
+                        <form method="POST" action="/add-ride-booking" class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="fullname">Full Name <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="fullname" name="fullname" class="form-control"
+                                    placeholder="John Doe" required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="modalEditUserPhone">Phone Number <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">+31</span>
+                                    <input type="text" id="phone" name="phone" class="form-control phone-number-mask"
+                                        placeholder="202 555 0111" required />
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="email">Email <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="email" name="email" class="form-control"
+                                    placeholder="example@domain.com" required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="service_type">Service Type <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <select id="service_type" name="service_type" class="form-select"
+                                    aria-label="Default select example" required>
+                                    <option selected>Airports</option>
+                                    <option>City To City</option>
+                                    <option>City Tours</option>
+                                    <option>Events</option>
+                                    <option>Seaports</option>
+                                    <option>Private Jets</option>
+                                    <option>Business</option>
+                                    <option>Weddings</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" for="pickup">Pickup <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="pickup" name="pickup" class="form-control"
+                                    placeholder="Enter Pickup" required />
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" for="drop">Drop <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="drop" name="drop" class="form-control" placeholder="Enter Drop"
+                                    required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="shoffr_class">Vehicle Class <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <select id="shoffr_class" name="shoffr_class" class="form-select"
+                                    aria-label="Default select example" required>
+                                    <option selected>First</option>
+                                    <option>Business</option>
+                                    <option>Van</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="pickupdate">Date <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="date" id="pickupdate" name="pickupdate" class="form-control" required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="pickuptime">Time <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="time" id="pickuptime" name="pickuptime" class="form-control" required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="flightinfo" class="form-label">Flight Info</label>
+                                <textarea class="form-control" id="flightinfo" name="flightinfo" rows="3"></textarea>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="baginfo" class="form-label">Bags Info</label>
+                                <textarea class="form-control" id="baginfo" name="baginfo" rows="3"></textarea>
+                            </div>
+                            <div class="col-12 col-md-12">
+                                <label for="note" class="form-label">Note</label>
+                                <textarea class="form-control" id="note" name="note" rows="3"></textarea>
+                            </div>
+                            <div class="col-12 text-center mt-4">
+                                <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>
+                                <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                                    aria-label="Close">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div class="modal fade" id="editride" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-simple modal-add-booking">
+                <div class="modal-content p-3 p-md-5">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="text-center mb-4">
+                            <h3>Update Booking</h3>
+                            <p>Update booking details will receive a data</p>
+                        </div>
+                        <form id="bookingForm" method="POST" action="/edit-ride-booking" class="row g-3">
+                            <!-- Hidden field for ID -->
+                            <input type="hidden" id="booking_id" name="booking_id" />
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="editfullname">Full Name <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="editfullname" name="fullname" class="form-control"
+                                    placeholder="John Doe" required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="editphone">Phone Number <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">+31</span>
+                                    <input type="text" id="editphone" name="phone"
+                                        class="form-control phone-number-mask" placeholder="202 555 0111" required />
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="editemail">Email <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="editemail" name="email" class="form-control"
+                                    placeholder="example@domain.com" required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="editservice_type">Service Type <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <select id="editservice_type" name="service_type" class="form-select"
+                                    aria-label="Default select example" required>
+                                    <option value="">Select Service Type</option>
+                                    <option value="Airports">Airports</option>
+                                    <option value="City To City">City To City</option>
+                                    <option value="City Tours">City Tours</option>
+                                    <option value="Events">Events</option>
+                                    <option value="Seaports">Seaports</option>
+                                    <option value="Private Jets">Private Jets</option>
+                                    <option value="Business">Business</option>
+                                    <option value="Weddings">Weddings</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" for="editpickup">Pickup <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="editpickup" name="pickup" class="form-control"
+                                    placeholder="Enter Pickup" required />
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" for="editdrop">Drop <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="editdrop" name="drop" class="form-control"
+                                    placeholder="Enter Drop" required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="editshoffr_class">Vehicle Class <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <select id="editshoffr_class" name="shoffr_class" class="form-select"
+                                    aria-label="Default select example" required>
+                                    <option value="">Select Vehicle Class</option>
+                                    <option value="First">First</option>
+                                    <option value="Business">Business</option>
+                                    <option value="Van">Van</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="editpickupdate">Date <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="date" id="editpickupdate" name="pickupdate" class="form-control"
+                                    required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="editpickuptime">Time <span
+                                        style="color: red; font-size: 18px;">*</span></label>
+                                <input type="time" id="editpickuptime" name="pickuptime" class="form-control"
+                                    required />
+                            </div>
+                            <div class="col-12 col-md-6">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="editflightinfo" class="form-label">Flight Info</label>
+                                <textarea class="form-control" id="editflightinfo" name="flightinfo"
+                                    rows="3"></textarea>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="editbaginfo" class="form-label">Bags Info</label>
+                                <textarea class="form-control" id="editbaginfo" name="baginfo" rows="3"></textarea>
+                            </div>
+                            <div class="col-12 col-md-12">
+                                <label for="editnote" class="form-label">Note</label>
+                                <textarea class="form-control" id="editnote" name="note" rows="3"></textarea>
+                            </div>
+                            <div class="col-12 text-center mt-4">
+                                <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>
+                                <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
+                                    aria-label="Close">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="driverModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-simple modal-add-booking">
+                <div class="modal-content p-3 p-md-5">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="driverModalLabel">Driver List</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="checkid" hidden></p>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Driver Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for driver in all_driver %}
+                                <tr>
+                                    <td>{{ driver.id }}</td>
+                                    <td>{{ driver.name }}</td>
+                                    <td><button class="btn btn-primary"
+                                            onclick="getApiData('{{driver.id}}')">Assign</button></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1090">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="toast align-items-center text-bg-{{ category if category else 'primary' }} border-0 show"
+            role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ message }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- build:js assets/vendor/js/core.js -->
+
+    <script>
+        document.querySelectorAll('.form-password-toggle .input-group-text').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const input = toggle.parentElement.querySelector('input');
+                const icon = toggle.querySelector('i');
+
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('bx-hide');
+                    icon.classList.add('bx-show');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('bx-show');
+                    icon.classList.add('bx-hide');
+                }
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const editButtons = document.querySelectorAll(".assign-driver-btn");
+            var pid = document.getElementById("checkid")
+
+            editButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    var id = button.getAttribute("data-id");
+                    pid.innerText = id
+                });
+            });
+        });
+
+        function getApiData(driverid) {
+            var pid = document.getElementById("checkid").innerText
+            console.log(pid);
+            var url = `/assign-driver?rideid=${pid}&driverid=${driverid}`
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        window.location.reload()
+                    }
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error("Fetch error:", error);
+                    window.location.reload();
+                });
+        }
+
+    </script>
+    <script>
+        // JavaScript to populate form fields when edit button is clicked
+        document.addEventListener('DOMContentLoaded', function () {
+            const editButtons = document.querySelectorAll('.edit-driver-btn');
+            const form = document.getElementById("bookingForm");
+
+            editButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Get data attributes from the clicked button
+                    const bookingId = this.getAttribute('data-id');
+                    const fullname = this.getAttribute('data-fullname');
+                    const email = this.getAttribute('data-email');
+                    var phone = this.getAttribute('data-phone');
+                    const pickup = this.getAttribute('data-pickup');
+                    const drop = this.getAttribute('data-drop');
+                    const date = this.getAttribute('data-date');
+                    const time = this.getAttribute('data-time');
+                    const serviceType = this.getAttribute('data-service-type');
+                    const vehicleClass = this.getAttribute('data-vehicle-class');
+                    const flightInfo = this.getAttribute('data-flight-info');
+                    const bagInfo = this.getAttribute('data-bag-info');
+                    const note = this.getAttribute('data-note');
+                    phone = phone.replace("+31", "").replace("+31", "")
+
+                    // Populate form fields
+                    document.getElementById('editfullname').value = fullname || '';
+                    document.getElementById('editemail').value = email || '';
+                    document.getElementById('editphone').value = phone || '';
+                    document.getElementById('editpickup').value = pickup || '';
+                    document.getElementById('editdrop').value = drop || '';
+                    document.getElementById('editpickupdate').value = date || '';
+                    document.getElementById('editpickuptime').value = time || '';
+                    document.getElementById('editflightinfo').value = flightInfo || '';
+                    document.getElementById('editbaginfo').value = bagInfo || '';
+                    document.getElementById('editnote').value = note || '';
+
+                    // Set select dropdown values
+                    if (serviceType) {
+                        document.getElementById('editservice_type').value = serviceType;
+                    }
+                    if (vehicleClass) {
+                        document.getElementById('editshoffr_class').value = vehicleClass;
+                    }
+                    form.action = `/edit-booking?id=${bookingId}`;
+                });
+            });
+        });
+    </script>
+
+
+    <script src="/static/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="/static/assets/vendor/libs/popper/popper.js"></script>
+    <script src="/static/assets/vendor/js/bootstrap.js"></script>
+    <script src="/static/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="/static/assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="/static/assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="/static/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script src="/static/assets/vendor/js/menu.js"></script>
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net/1.13.6/jquery.dataTables.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs5/1.13.6/dataTables.bootstrap5.min.js"></script>
+
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+    <script>
+        $(document).ready(function () {
+            // Check if DataTables is loaded
+            if (typeof $.fn.DataTable === 'undefined') {
+                console.error('DataTables not loaded properly');
+                return;
+            }
+
+            // Initialize DataTable
+            var table = $('#ridesTable').DataTable({
+                // DataTable configuration
+                "pageLength": 10,
+                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                "order": [[0, "desc"]], // Sort by ID descending
+                "responsive": true,
+                "autoWidth": false,
+                "columnDefs": [
+                    {
+                        "targets": [3, 4], // Phone and Email columns
+                        "width": "120px"
+                    },
+                    {
+                        "targets": [5, 6], // Pickup and Drop columns
+                        "width": "150px"
+                    },
+                    {
+                        "targets": [11, 12, 13], // Flight Info, Bag Info, Note columns
+                        "width": "120px"
+                    },
+                    {
+                        "targets": [15, 16], // Created and Updated columns
+                        "width": "130px"
+                    },
+                    {
+                        "targets": [17], // Actions column
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "120px"
+                    }
+                ],
+                "language": {
+                    "search": "Search:",
+                    "lengthMenu": "Show _MENU_ entries",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+                    "infoEmpty": "No entries found",
+                    "infoFiltered": "(filtered from _MAX_ total entries)",
+                    "paginate": {
+                        "first": "First",
+                        "last": "Last",
+                        "next": "Next",
+                        "previous": "Previous"
+                    }
+                }
+            });
+
+            // Populate filter dropdowns with unique values
+            populateFilterDropdowns();
+
+            // Custom filter functions
+            function populateFilterDropdowns() {
+                // Get unique service types
+                var serviceTypes = [];
+                table.column(9).data().unique().sort().each(function (d, j) {
+                    if (d && d.trim() !== '') {
+                        serviceTypes.push(d);
+                    }
+                });
+
+                // Get unique vehicle classes
+                var vehicleClasses = [];
+                table.column(10).data().unique().sort().each(function (d, j) {
+                    if (d && d.trim() !== '') {
+                        vehicleClasses.push(d);
+                    }
+                });
+
+                // Populate service type dropdown
+                serviceTypes.forEach(function (type) {
+                    $('#serviceTypeFilter').append('<option value="' + type + '">' + type + '</option>');
+                });
+
+                // Populate vehicle class dropdown
+                vehicleClasses.forEach(function (vehicleClass) {
+                    $('#vehicleClassFilter').append('<option value="' + vehicleClass + '">' + vehicleClass + '</option>');
+                });
+            }
+
+            // Custom filtering function
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var serviceType = $('#serviceTypeFilter').val();
+                    var vehicleClass = $('#vehicleClassFilter').val();
+                    var status = $('#statusFilter').val();
+                    console.log("status was: ", status);
+
+                    var dateFrom = $('#dateFromFilter').val();
+                    var dateTo = $('#dateToFilter').val();
+                    var driverFilter = $('#driverFilter').val();
+
+                    var rowServiceType = data[9] || '';
+                    var rowVehicleClass = data[10] || '';
+                    var rowStatus = data[16] || '';
+                    var rowUpdatedAt = data[15] || ''; // Updated At column (index 16)
+                    var rowDriverId = data[1] || '';
+                    rowStatus = rowStatus.replace("On Way", "On_Way").replace("Not Started", "Not_Started");
+                    console.log(rowStatus);
+                    // Extract status from badge HTML
+                    var statusMatch = rowStatus.match(/(\w+)/);
+                    console.log(statusMatch);
+                    var actualStatus = statusMatch ? statusMatch[1].replace('-', '_') : ' ';
+                    console.log(actualStatus);
+
+                    // Service Type filter
+                    if (serviceType && rowServiceType !== serviceType) {
+                        return false;
+                    }
+
+                    // Vehicle Class filter
+                    if (vehicleClass && rowVehicleClass !== vehicleClass) {
+                        return false;
+                    }
+
+                    // Status filter
+                    if (status && actualStatus !== status) {
+                        return false;
+                    }
+
+                    // Date range filter for Updated At
+                    if (dateFrom || dateTo) {
+                        // Extract date from datetime string with microseconds (YYYY-MM-DD HH:MM:SS.microseconds format)
+                        var updatedDate = '';
+                        // console.log("row update", rowUpdatedAt);
+                        if (rowUpdatedAt) {
+                            // Handle format: 2025-06-29 12:53:50.986000
+                            var dateTimeParts = rowUpdatedAt.split(' ');
+                            if (dateTimeParts.length >= 1) {
+                                updatedDate = dateTimeParts[0]; // Get just the date part (YYYY-MM-DD)
+                            }
+                            // console.log(updatedDate);
+                        }
+
+                        if (dateFrom && updatedDate && updatedDate < dateFrom) {
+                            return false;
+                        }
+
+                        if (dateTo && updatedDate && updatedDate > dateTo) {
+                            return false;
+                        }
+                    }
+
+                    // Driver filter
+                    if (driverFilter) {
+                        if (driverFilter === 'assigned' && !rowDriverId.trim()) {
+                            return false;
+                        }
+                        if (driverFilter === 'unassigned' && rowDriverId.trim()) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+            );
+
+            // Filter event handlers
+            $('#serviceTypeFilter, #vehicleClassFilter, #statusFilter, #dateFromFilter, #dateToFilter, #driverFilter').on('change', function () {
+                table.draw();
+            });
+
+            // Reset filters
+            $('#resetFilters').on('click', function () {
+                $('#serviceTypeFilter').val('');
+                $('#vehicleClassFilter').val('');
+                $('#statusFilter').val('');
+                $('#dateFromFilter').val('');
+                $('#dateToFilter').val('');
+                $('#driverFilter').val('');
+                table.search('').draw();
+            });
+
+            // Quick filter for today's updates
+            $('#applyQuickFilters').on('click', function () {
+                var today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+                $('#dateFromFilter').val(today);
+                $('#dateToFilter').val(today);
+                table.draw();
+            });
+
+        });
+    </script>
+
+
+
+    <!-- Main JS -->
+    <script src="/static/assets/js/main.js"></script>
+</body>
+
+</html>

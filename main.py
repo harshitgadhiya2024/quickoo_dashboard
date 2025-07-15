@@ -71,15 +71,15 @@ class UKDataValidator:
 
     @staticmethod
     def validate_dutch_phone(phone):
-        """Validate Dutch phone number format (for existing +44 numbers)"""
+        """Validate Dutch phone number format (for existing +31 numbers)"""
         try:
             if not phone or not phone.strip():
                 return False, "Phone number is required"
 
             phone = phone.strip()
 
-            # If it starts with +44, validate as Dutch number
-            if phone.startswith('+44') or phone.startswith('0031'):
+            # If it starts with +31, validate as Dutch number
+            if phone.startswith('+31') or phone.startswith('0031'):
                 parsed_number = phonenumbers.parse(phone, "NL")
                 if phonenumbers.is_valid_number(parsed_number):
                     formatted_number = phonenumbers.format_number(parsed_number, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
@@ -466,6 +466,25 @@ def booking_details():
         print(f"{datetime.now()}: Error in booking details route: {str(e)}")
         return render_template("booking-details.html")
 
+@app.route("/invoice_details", methods=["GET", "POST"])
+@token_required
+def invoice_details():
+    try:
+        is_data = True
+        all_data = []
+        all_booking_data = list(mongoOperation().get_spec_data_from_coll(client, "quickoo_uk", "booking_data", {"status": "completed"}))
+        if all_booking_data:
+            for data in all_booking_data:
+                del data["_id"]
+                all_data.append(data)
+        else:
+            is_data = False
+
+        return render_template("invoice_generation.html", is_data=is_data, all_data=all_data)
+
+    except Exception as e:
+        print(f"{datetime.now()}: Error in invoice generation route: {str(e)}")
+        return render_template("invoice_generation.html")
 
 @app.route("/assign-driver", methods=["GET"])
 @token_required
@@ -477,6 +496,23 @@ def assign_driver():
         if not ride_id or not driver_id:
             flash("Missing ride ID or driver ID", "danger")
             return {"error": "Missing required parameters"}
+
+        booking_data = list(mongoOperation().get_spec_data_from_coll(client, "quickoo_uk", "booking_data", {"id": ride_id}))
+        driver_data = list(mongoOperation().get_spec_data_from_coll(client, "quickoo_uk", "driver_data", {"id": driver_id}))
+
+        try:
+            del booking_data[0]["_id"]
+        except:
+            pass
+
+        driver_mapping_dict = {
+            "driver_name": driver_data[0]["drivername"],
+            "contact": driver_data[0]["phone"],
+            "email": driver_data[0]["email"]
+        }
+
+        html_mail_format = htmlOperation().driver_assignment_process(driver_mapping_dict, booking_data[0])
+        emailOperation().send_email(booking_data[0]["email"], "Quickoo: Driver Assignment Successful", html_mail_format)
 
         mongoOperation().update_mongo_data(client, "quickoo_uk", "booking_data", {"id": ride_id},
                                            {"driver_id": driver_id, "updated_at": datetime.utcnow()})
@@ -634,18 +670,14 @@ def add_vender():
         # Define validation rules for vendor
         validation_rules = {
             'vender_name': lambda x: UKDataValidator.validate_name(x, "Vendor Name"),
-            'vat_no': UKDataValidator.validate_vat_number,
             'tax': UKDataValidator.validate_percentage,
-            'phone': UKDataValidator.validate_uk_phone,
             'email': UKDataValidator.validate_email,
         }
 
         # Get form data
         form_data = {
             'vender_name': request.form.get("vendername", ""),
-            'vat_no': request.form.get("vatno", ""),
             'tax': request.form.get("tax", ""),
-            'phone': request.form.get("phone", ""),
             'email': request.form.get("email", ""),
         }
 
@@ -668,10 +700,10 @@ def add_vender():
         mapping_dict = {
             "id": uid,
             "vender_name": validated_data['vender_name'],
-            "vat_no": validated_data['vat_no'],
+            "vat_no": request.form.get("vatno", ""),
             "tax": validated_data['tax'],
             "email": validated_data['email'],
-            "phone": validated_data['phone'],
+            "phone": request.form.get("phone", ""),
             "status": "active",
             "created_at": datetime.utcnow(),
             "updated_at": datetime.utcnow()
@@ -686,6 +718,47 @@ def add_vender():
         flash("An error occurred while adding vendor", "danger")
         return redirect("/vendor_details")
 
+@app.route("/delete-booking", methods=["GET"])
+@token_required
+def delete_booking():
+    try:
+        uid = request.args.get("id")
+        mongoOperation().delete_data_from_coll(client, "quickoo_uk", "booking_data", {"id": uid})
+        flash("Booking deleted successfully", "success")
+        return redirect("/booking_details")
+
+    except Exception as e:
+        print(f"{datetime.now()}: Error in delete booking data route: {str(e)}")
+        flash("An error occurred while deleting booking", "danger")
+        return redirect("/booking_details")
+
+@app.route("/delete-vendor", methods=["GET"])
+@token_required
+def delete_vendor():
+    try:
+        uid = request.args.get("id")
+        mongoOperation().delete_data_from_coll(client, "quickoo_uk", "vender_data", {"id": uid})
+        flash("Vendor deleted successfully", "success")
+        return redirect("/vendor_details")
+
+    except Exception as e:
+        print(f"{datetime.now()}: Error in delete vendor data route: {str(e)}")
+        flash("An error occurred while deleting vendor", "danger")
+        return redirect("/vendor_details")
+
+@app.route("/delete-driver", methods=["GET"])
+@token_required
+def delete_driver():
+    try:
+        uid = request.args.get("id")
+        mongoOperation().delete_data_from_coll(client, "quickoo_uk", "driver_data", {"id": uid})
+        flash("Booking deleted successfully", "success")
+        return redirect("/driver_details")
+
+    except Exception as e:
+        print(f"{datetime.now()}: Error in delete booking data route: {str(e)}")
+        flash("An error occurred while deleting booking", "danger")
+        return redirect("/booking_details")
 
 @app.route("/edit-vender", methods=["POST"])
 @token_required
@@ -699,18 +772,14 @@ def edit_vender():
         # Define validation rules for vendor editing
         validation_rules = {
             'vender_name': lambda x: UKDataValidator.validate_name(x, "Vendor Name"),
-            'vat_no': UKDataValidator.validate_vat_number,
             'tax': UKDataValidator.validate_percentage,
-            'phone': UKDataValidator.validate_uk_phone,
             'email': UKDataValidator.validate_email,
         }
 
         # Get form data
         form_data = {
             'vender_name': request.form.get("vendername", ""),
-            'vat_no': request.form.get("vatno", ""),
             'tax': request.form.get("tax", ""),
-            'phone': request.form.get("phone", ""),
             'email': request.form.get("email", ""),
         }
 
@@ -724,10 +793,10 @@ def edit_vender():
 
         update_mapping_dict = {
             "vender_name": validated_data['vender_name'],
-            "vat_no": validated_data['vat_no'],
+            "vat_no": request.form.get('vat_no'),
             "tax": validated_data['tax'],
             "email": validated_data['email'],
-            "phone": validated_data['phone'],
+            "phone": request.form.get('phone'),
             "updated_at": datetime.utcnow()
         }
 
@@ -803,7 +872,6 @@ def add_driver():
             validation_rules = {
                 'drivername': lambda x: UKDataValidator.validate_name(x, "Driver Name"),
                 'email': UKDataValidator.validate_email,
-                'phone': UKDataValidator.validate_uk_phone,
                 'pco_expire_date': lambda x: UKDataValidator.validate_date(x, "PCO Expiry Date"),
                 'pco_vehicle_expire_date': lambda x: UKDataValidator.validate_date(x, "PCO Vehicle Expiry Date"),
             }
@@ -812,7 +880,6 @@ def add_driver():
             form_data = {
                 'drivername': request.form.get('drivername', ''),
                 'email': request.form.get('email', ''),
-                'phone': request.form.get('phone', ''),
                 'pco_expire_date': request.form.get('pco_expire_date', ''),
                 'pco_vehicle_expire_date': request.form.get('pco_vehicle_expire_date', ''),
             }
@@ -866,7 +933,7 @@ def add_driver():
                 'drivername': validated_data['drivername'],
                 "photo":save_all_file("driver_photo"),
                 'email': validated_data['email'],
-                'phone': validated_data['phone'],
+                'phone': "+31" + request.form.get('phone', ''),
                 'pco_licence_number': save_all_file('pco_licence_number'),
                 'national_insurance_number': request.form['national_insurance_number'],
                 'pco_vehicle_licence': save_all_file('pco_vehicle_licence'),
@@ -925,18 +992,12 @@ def edit_driver():
         validation_rules = {
             'drivername': lambda x: UKDataValidator.validate_name(x, "Driver Name"),
             'email': UKDataValidator.validate_email,
-            'phone': UKDataValidator.validate_uk_phone,
-            'national_insurance_number': UKDataValidator.validate_national_insurance,
-            'car_register_number': UKDataValidator.validate_vehicle_registration,
         }
 
         # Get form data
         form_data = {
             'drivername': request.form.get('drivername', ''),
-            'email': request.form.get('email', ''),
-            'phone': request.form.get('phone', ''),
-            'national_insurance_number': request.form.get('national_insurance_number', ''),
-            'car_register_number': request.form.get('car_register_number', ''),
+            'email': request.form.get('email', '')
         }
 
         # Validate form data
@@ -950,9 +1011,9 @@ def edit_driver():
         driver_data = {
             'drivername': validated_data['drivername'],
             'email': validated_data['email'],
-            'phone': validated_data['phone'],
-            'national_insurance_number': validated_data['national_insurance_number'],
-            'car_register_number': validated_data['car_register_number'],
+            'phone': request.form.get('phone', ''),
+            'national_insurance_number': request.form.get('national_insurance_number', ''),
+            'car_register_number': request.form.get('car_register_number', ''),
             "updated_at": datetime.utcnow()
         }
 
@@ -979,6 +1040,82 @@ def edit_driver():
         mongoOperation().update_mongo_data(client, "quickoo_uk", "driver_data", {"id": uid}, driver_data)
         flash("Driver updated successfully", "success")
         return redirect("/driver_details")
+
+    except Exception as e:
+        print(f"{datetime.now()}: Error in edit driver data route: {str(e)}")
+        flash("An error occurred while updating driver", "danger")
+        return redirect("/driver_details")
+
+@app.route("/edit-booking", methods=["POST"])
+@token_required
+def edit_booking():
+    try:
+        uid = request.args.get("id", "")
+        if not uid:
+            flash("Booking ID is required", "danger")
+            return redirect("/booking_details")
+
+        # Define validation rules for booking
+        validation_rules = {
+            'full_name': lambda x: UKDataValidator.validate_name(x, "Full Name"),
+            'phone': UKDataValidator.validate_uk_phone,
+            'email': UKDataValidator.validate_email,
+            'pickup': lambda x: (True, x.strip()) if x and x.strip() else (False, "Pickup location is required"),
+            'drop': lambda x: (True, x.strip()) if x and x.strip() else (False, "Drop location is required"),
+            'pickupdate': lambda x: UKDataValidator.validate_date(x, "Pickup Date"),
+            'pickuptime': lambda x: (True, x.strip()) if x and x.strip() else (False, "Pickup time is required"),
+        }
+
+        # Get form data
+        form_data = {
+            'full_name': request.form.get("fullname", ""),
+            'phone': request.form.get("phone", ""),
+            'email': request.form.get("email", ""),
+            'pickup': request.form.get("pickup", ""),
+            'drop': request.form.get("drop", ""),
+            'pickupdate': request.form.get("pickupdate", ""),
+            'pickuptime': request.form.get("pickuptime", ""),
+        }
+
+        # Validate form data
+        is_valid, validated_data, errors = validate_form_data(form_data, validation_rules)
+
+        if not is_valid:
+            for error in errors:
+                flash(error, "danger")
+            return redirect("/booking_details")
+
+        # Optional fields (no validation required but can be validated)
+        service_type = request.form.get("service_type", "standard")
+        shoffr_class = request.form.get("shoffr_class", "")
+        flightinfo = request.form.get("flightinfo", "")
+        baginfo = request.form.get("baginfo", "")
+        note = request.form.get("note", "")
+
+        updated_mapping_dict = {
+            "full_name": validated_data['full_name'],
+            "phone": validated_data['phone'],
+            "email": validated_data['email'],
+            "pickup": validated_data['pickup'],
+            "drop": validated_data['drop'],
+            "date": validated_data['pickupdate'],
+            "time": validated_data['pickuptime'],
+            "service_type": service_type,
+            "shoffr_class": shoffr_class,
+            "flight_info": flightinfo,
+            "bag_info": baginfo,
+            "note": note,
+            "updated_at": datetime.utcnow()
+        }
+
+        booking_template = htmlOperation().booking_confirmation_process(updated_mapping_dict)
+        emailOperation().send_email(
+            validated_data["email"], "Quickoo - Updated Booking Confirmation", booking_template
+        )
+
+        mongoOperation().update_mongo_data(client, "quickoo_uk", "booking_data", {"id": uid}, updated_mapping_dict)
+        flash("Booking updated successfully", "success")
+        return redirect("/booking_details")
 
     except Exception as e:
         print(f"{datetime.now()}: Error in edit driver data route: {str(e)}")

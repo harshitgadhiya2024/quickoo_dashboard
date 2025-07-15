@@ -37,6 +37,54 @@
     <!-- Helpers -->
     <script src="/static/assets/vendor/js/helpers.js"></script>
     <script src="/static/assets/js/config.js"></script>
+    <!-- DataTables CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs5/1.13.6/dataTables.bootstrap5.min.css" rel="stylesheet">
+    
+    <style>
+        .dataTables_wrapper {
+            padding: 20px;
+        }
+
+        .filter-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            margin-top: 20px;
+            padding-left: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #6c757d;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            min-width: 200px;
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+
+        .btn-reset {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
 
 </head>
 
@@ -154,8 +202,6 @@
                                     </ul>
                                 </li>
                                 <!--/ User -->
-
-
                             </ul>
                         </div>
                         <!-- Search Small Screens -->
@@ -176,9 +222,25 @@
                                     data-bs-toggle="modal" data-bs-target="#adddriver"> Add Driver </button>
                             </div>
                             <div class="card-body">
+                                <div class="filter-section">
+                                    <div class="filter-row">
+                                        <div class="filter-group">
+                                            <label for="updatedFromFilter">Updated From</label>
+                                            <input type="date" id="updatedFromFilter"
+                                                class="form-control form-control-sm">
+                                        </div>
+                                        <div class="filter-group">
+                                            <label for="updatedToFilter">Updated To</label>
+                                            <input type="date" id="updatedToFilter"
+                                                class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                    <button id="resetFilters" class="btn btn-secondary btn-reset">Reset
+                                        Filters</button>
+                                </div>
                                 {% if is_data %}
                                 <div class="table-responsive text-nowrap" style="height: 440px; overflow-y: auto;">
-                                    <table class="table table-bordered">
+                                    <table id="driverTable" class="table table-striped table-hover">
                                         <thead>
                                             <tr class="text-nowrap">
                                                 <th>ID</th>
@@ -206,21 +268,32 @@
                                             <tr>
                                                 <th scope="row">{{data["id"]}}</th>
                                                 <td>{{data["drivername"]}}</td>
-                                                <td><a href='{{data["photo"]}}'><img src='{{data["photo"]}}' width="80" height="80" style="border-radius: 50%;"></img></a></td>
+                                                <td><a href='{{data["photo"]}}'><img src='{{data["photo"]}}' width="80"
+                                                            height="80" style="border-radius: 50%;"></img></a></td>
                                                 <td>{{data["email"]}}</td>
                                                 <td>{{data["phone"]}}</td>
-                                                <td><a href='{{data["pco_licence_number"]}}'><img src='{{data["pco_licence_number"]}}' width="80" height="80" style="border-radius: 50%;"></img></a></td>
+                                                <td><a href='{{data["pco_licence_number"]}}'><img
+                                                            src='{{data["pco_licence_number"]}}' width="80" height="80"
+                                                            style="border-radius: 50%;"></img></a></td>
                                                 <td>{{data["national_insurance_number"]}}</td>
-                                                <td><a href='{{data["pco_vehicle_licence"]}}'><img src='{{data["pco_vehicle_licence"]}}' width="80" height="80" style="border-radius: 50%;"></img></a></td>
+                                                <td><a href='{{data["pco_vehicle_licence"]}}'><img
+                                                            src='{{data["pco_vehicle_licence"]}}' width="80" height="80"
+                                                            style="border-radius: 50%;"></img></a></td>
                                                 <td>{{data["car_register_number"]}}</td>
                                                 <td>{{data["pco_expire_date"]}}</td>
                                                 <td>{{data["pco_vehicle_expire_date"]}}</td>
-                                                <td><a href='{{data["driving_licence_url"]}}'><img src='{{data["driving_licence_url"]}}' width="80" height="80" style="border-radius: 50%;"></img></a></td>
-                                                <td><a href='{{data["insurance_certificate_url"]}}'><img src='{{data["insurance_certificate_url"]}}' width="80" height="80" style="border-radius: 50%;"></img></a></td>
+                                                <td><a href='{{data["driving_licence_url"]}}'><img
+                                                            src='{{data["driving_licence_url"]}}' width="80" height="80"
+                                                            style="border-radius: 50%;"></img></a></td>
+                                                <td><a href='{{data["insurance_certificate_url"]}}'><img
+                                                            src='{{data["insurance_certificate_url"]}}' width="80"
+                                                            height="80" style="border-radius: 50%;"></img></a></td>
                                                 <td>
                                                     <div class="vehicle-images" style="display: inline-flex;">
                                                         {% for vehicle_url in data["vehicle_photos_urls"] %}
-                                                        <a href='{{vehicle_url}}'><img src='{{ vehicle_url }}' width="80" height="80" style="border-radius: 50%; margin-right: 10px;"></img></a>
+                                                        <a href='{{vehicle_url}}'><img src='{{ vehicle_url }}'
+                                                                width="80" height="80"
+                                                                style="border-radius: 50%; margin-right: 10px;"></img></a>
                                                         {% endfor %}
                                                     </div>
                                                 <td>{{data["is_assign"]}}</td>
@@ -246,18 +319,20 @@
                                                                 {% endfor %}
                                                             </ul>
                                                         </div>
-                                                        <button class="btn btn-sm btn-warning edit-driver-btn"
+                                                        <button class="btn btn-sm btn-warning edit-driver-btn" style="margin-right: 10px;"
                                                             data-bs-toggle="modal" data-bs-target="#editdriver"
-                                                           data-id="{{ data.id }}"
-                                                           data-drivername="{{ data.drivername }}"
-                                                           data-email="{{data.email}}"
-                                                           data-phone="{{data.phone}}"
-                                                           data-pco_licence_number="{{data.pco_licence_number}}"
-                                                           data-national_insurance_number="{{data.national_insurance_number}}"
-                                                           data-pco_vehicle_licence="{{data.pco_vehicle_licence}}"
-                                                           data-car_register_number="{{data.car_register_number}}">
+                                                            data-id="{{ data.id }}" data-pco_expire_date="{{data.pco_expire_date}}"
+                                                            data-drivername="{{ data.drivername }}" data-pco_vehicle_expire_date="{{data.pco_vehicle_expire_date}}"
+                                                            data-email="{{data.email}}" data-phone="{{data.phone}}"
+                                                            data-pco_licence_number="{{data.pco_licence_number}}"
+                                                            data-national_insurance_number="{{data.national_insurance_number}}"
+                                                            data-pco_vehicle_licence="{{data.pco_vehicle_licence}}"
+                                                            data-car_register_number="{{data.car_register_number}}">
                                                             <i class="menu-icon tf-icons bx bx-edit"></i>Edit
                                                         </button>
+                                                        <a class="btn btn-danger"
+                                                            href="delete-driver?id={{ data.id }}"><i
+                                                                class="menu-icon tf-icons bx bx-trash"></i>Delete</a>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -322,7 +397,7 @@
                                 <label class="form-label" for="modalEditUserPhone">Phone Number <span
                                         style="color: red; font-size: 18px;">*</span></label>
                                 <div class="input-group input-group-merge">
-                                    <span class="input-group-text">+44</span>
+                                    <span class="input-group-text">+31</span>
                                     <input type="text" id="phone" name="phone" class="form-control phone-number-mask"
                                         placeholder="202 555 0111" required />
                                 </div>
@@ -336,54 +411,62 @@
                             <div class="col-12 col-md-6">
                                 <label class="form-label" for="national_insurance_number">National insurance number<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <input type="text" id="national_insurance_number" name="national_insurance_number" class="form-control"
-                                    placeholder="Enter national insurance number" required />
+                                <input type="text" id="national_insurance_number" name="national_insurance_number"
+                                    class="form-control" placeholder="Enter national insurance number" required />
                             </div>
                             <div class="col-12 col-md-12">
                                 <label class="form-label" for="pco_licence_number">PCO licence<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <input type="file" id="pco_licence_number" name="pco_licence_number" accept=".jpg, .jpeg, .png, .webp" class="form-control" required />
+                                <input type="file" id="pco_licence_number" name="pco_licence_number"
+                                    accept=".jpg, .jpeg, .png, .webp" class="form-control" required />
                             </div>
                             <div class="col-12 col-md-12">
                                 <label class="form-label" for="pco_expire_date">PCO Licence Expire Date<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <input type="date" id="pco_expire_date" name="pco_expire_date" class="form-control" required />
+                                <input type="date" id="pco_expire_date" name="pco_expire_date" class="form-control"
+                                    required />
                             </div>
                             <div class="col-12 col-md-12">
                                 <label class="form-label" for="pco_vehicle_licence">PCO vehicle licence<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <input type="file" id="pco_vehicle_licence" name="pco_vehicle_licence" accept=".jpg, .jpeg, .png, .webp" class="form-control" required />
+                                <input type="file" id="pco_vehicle_licence" name="pco_vehicle_licence"
+                                    accept=".jpg, .jpeg, .png, .webp" class="form-control" required />
                             </div>
                             <div class="col-12 col-md-12">
-                                <label class="form-label" for="pco_vehicle_expire_date">PCO Vehicle Licence Expire Date<span
-                                        style="color: red; font-size: 18px;">*</span></label>
-                                <input type="date" id="pco_vehicle_expire_date" name="pco_vehicle_expire_date" class="form-control" required />
+                                <label class="form-label" for="pco_vehicle_expire_date">PCO Vehicle Licence Expire
+                                    Date<span style="color: red; font-size: 18px;">*</span></label>
+                                <input type="date" id="pco_vehicle_expire_date" name="pco_vehicle_expire_date"
+                                    class="form-control" required />
                             </div>
                             <div class="col-12 col-md-12">
                                 <label class="form-label" for="car_register_number">Car register number<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <input type="text" id="car_register_number" name="car_register_number" class="form-control"
-                                    placeholder="Enter car register number" required />
+                                <input type="text" id="car_register_number" name="car_register_number"
+                                    class="form-control" placeholder="Enter car register number" required />
                             </div>
                             <div class="col-12 col-md-12">
                                 <label class="form-label" for="driver_photo">Driver Photo<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <input type="file" id="driver_photo" name="driver_photo" accept=".jpg, .jpeg, .png, .webp" class="form-control" required />
+                                <input type="file" id="driver_photo" name="driver_photo"
+                                    accept=".jpg, .jpeg, .png, .webp" class="form-control" required />
                             </div>
                             <div class="col-12 col-md-12">
                                 <label class="form-label" for="driving_licence">Driving Licence<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <input type="file" id="driving_licence" name="driving_licence" accept=".jpg, .jpeg, .png, .webp" class="form-control" required />
+                                <input type="file" id="driving_licence" name="driving_licence"
+                                    accept=".jpg, .jpeg, .png, .webp" class="form-control" required />
                             </div>
                             <div class="col-12 col-md-12">
                                 <label class="form-label" for="insurance_certificate">Insurance Certificate<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <input type="file" id="insurance_certificate" name="insurance_certificate" accept=".jpg, .jpeg, .png, .webp" class="form-control" required />
+                                <input type="file" id="insurance_certificate" name="insurance_certificate"
+                                    accept=".jpg, .jpeg, .png, .webp" class="form-control" required />
                             </div>
                             <div class="col-12 col-md-12">
                                 <label class="form-label" for="vehicle_photos">Vehicle Photos (Minimum 3 required)<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <input type="file" id="vehicle_photos" name="vehicle_photos" accept=".jpg, .jpeg, .png, .webp" multiple class="form-control" required />
+                                <input type="file" id="vehicle_photos" name="vehicle_photos"
+                                    accept=".jpg, .jpeg, .png, .webp" multiple class="form-control" required />
                             </div>
                             <div class="col-12 text-center mt-4">
                                 <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>
@@ -405,7 +488,8 @@
                             <h3>Edit Driver</h3>
                             <p>Edit Driver details will receive a data</p>
                         </div>
-                        <form method="POST" id="driverForm" action="/edit-driver" enctype="multipart/form-data" class="row g-3">
+                        <form method="POST" id="driverForm" action="/edit-driver" enctype="multipart/form-data"
+                            class="row g-3">
                             <div class="col-12 col-md-6">
                                 <label class="form-label" for="editdrivername">Driver Name <span
                                         style="color: red; font-size: 18px;">*</span></label>
@@ -416,9 +500,9 @@
                                 <label class="form-label" for="editphone">Phone Number <span
                                         style="color: red; font-size: 18px;">*</span></label>
                                 <div class="input-group input-group-merge">
-                                    <span class="input-group-text">+44</span>
-                                    <input type="text" id="editphone" name="phone" class="form-control phone-number-mask"
-                                        placeholder="202 555 0111" required />
+                                    <span class="input-group-text">+31</span>
+                                    <input type="text" id="editphone" name="phone"
+                                        class="form-control phone-number-mask" placeholder="202 555 0111" required />
                                 </div>
                             </div>
                             <div class="col-12 col-md-6">
@@ -428,26 +512,28 @@
                                     placeholder="example@domain.com" required />
                             </div>
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="editnational_insurance_number">National insurance number<span
-                                        style="color: red; font-size: 18px;">*</span></label>
-                                <input type="text" id="editnational_insurance_number" name="national_insurance_number" class="form-control"
-                                    placeholder="Enter national insurance number" required />
+                                <label class="form-label" for="editnational_insurance_number">National insurance
+                                    number<span style="color: red; font-size: 18px;">*</span></label>
+                                <input type="text" id="editnational_insurance_number" name="national_insurance_number"
+                                    class="form-control" placeholder="Enter national insurance number" required />
                             </div>
                             <div class="col-12 col-md-12">
                                 <label class="form-label" for="editcar_register_number">Car register number<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <input type="text" id="editcar_register_number" name="car_register_number" class="form-control"
-                                    placeholder="Enter car register number" required />
+                                <input type="text" id="editcar_register_number" name="car_register_number"
+                                    class="form-control" placeholder="Enter car register number" required />
                             </div>
                             <div class="col-12 col-md-6">
                                 <label class="form-label" for="editpco_expire_date">PCO Expire Date<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <input type="date" id="editpco_expire_date" name="pco_expire_date" class="form-control" />
+                                <input type="date" id="editpco_expire_date" name="pco_expire_date"
+                                    class="form-control" />
                             </div>
                             <div class="col-12 col-md-6">
                                 <label class="form-label" for="editpco_vehicle_expire_date">PCO Vehicle Expire Date<span
                                         style="color: red; font-size: 18px;">*</span></label>
-                                <input type="date" id="editpco_vehicle_expire_date" name="pco_vehicle_expire_date" class="form-control" />
+                                <input type="date" id="editpco_vehicle_expire_date" name="pco_vehicle_expire_date"
+                                    class="form-control" />
                             </div>
                             <div class="col-12 text-center mt-4">
                                 <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>
@@ -510,15 +596,21 @@
                     var name = button.getAttribute("data-name");
                     var drivername = button.getAttribute("data-drivername");
                     var email = button.getAttribute("data-email");
-                    var phone = button.getAttribute("data-phone").replace("+44", "");
+                    var pco_vehicle_expire_date = button.getAttribute('data-pco_vehicle_expire_date');
+                    var pco_expire_date = button.getAttribute('data-pco_expire_date');
+                    var phone = button.getAttribute("data-phone").replace("+31", "");
                     var national_insurance_number = button.getAttribute("data-national_insurance_number");
                     var car_register_number = button.getAttribute("data-car_register_number");
                     var id = button.getAttribute("data-id");
+                    console.log(pco_expire_date, pco_vehicle_expire_date);
+                    
 
                     // Populate modal form
                     document.getElementById("editdrivername").value = drivername;
                     document.getElementById("editemail").value = email;
                     document.getElementById("editphone").value = phone;
+                    document.getElementById('editpco_expire_date').value = pco_expire_date || '';
+                    document.getElementById('editpco_vehicle_expire_date').value = pco_vehicle_expire_date || '';
                     document.getElementById("editnational_insurance_number").value = national_insurance_number;
                     document.getElementById("editcar_register_number").value = car_register_number;
 
@@ -542,6 +634,139 @@
     <!-- endbuild -->
 
     <!-- Vendors JS -->
+    <!-- DataTables JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net/1.13.6/jquery.dataTables.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs5/1.13.6/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Check if DataTables is loaded
+            if (typeof $.fn.DataTable === 'undefined') {
+                console.error('DataTables not loaded properly');
+                return;
+            }
+
+            // Initialize DataTable
+            var table = $('#driverTable').DataTable({
+                "pageLength": 10,
+                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                "order": [[0, "desc"]], // Sort by ID descending
+                "responsive": true,
+                "autoWidth": false,
+                "scrollX": true, // Enable horizontal scrolling for many columns
+                "columnDefs": [
+                    {
+                        "targets": [2, 5, 7, 11, 12], // Image columns
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "60px"
+                    },
+                    {
+                        "targets": [3], // Email column
+                        "width": "160px"
+                    },
+                    {
+                        "targets": [4], // Phone column
+                        "width": "130px"
+                    },
+                    {
+                        "targets": [6, 8], // National Insurance, Car Registration
+                        "width": "120px"
+                    },
+                    {
+                        "targets": [9, 10], // Expiry date columns
+                        "width": "110px"
+                    },
+                    {
+                        "targets": [13], // Vehicle photos
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "120px"
+                    },
+                    {
+                        "targets": [14], // Assigned, Status
+                        "width": "90px"
+                    },
+                    {
+                        "targets": [15, 16], // Created/Updated columns
+                        "width": "140px"
+                    },
+                    {
+                        "targets": [17], // Actions column
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "180px"
+                    }
+                ],
+                "language": {
+                    "search": "Search drivers:",
+                    "lengthMenu": "Show _MENU_ drivers",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ drivers",
+                    "infoEmpty": "No drivers found",
+                    "infoFiltered": "(filtered from _MAX_ total drivers)",
+                    "paginate": {
+                        "first": "First",
+                        "last": "Last",
+                        "next": "Next",
+                        "previous": "Previous"
+                    }
+                }
+            });
+
+            // Function to calculate days until expiry
+            function getDaysUntilExpiry(dateString) {
+                if (!dateString) return null;
+                var expiryDate = new Date(dateString);
+                var today = new Date();
+                var timeDiff = expiryDate.getTime() - today.getTime();
+                return Math.ceil(timeDiff / (1000 * 3600 * 24));
+            }
+
+            // Custom filtering function
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var updatedFrom = $('#updatedFromFilter').val();
+                    var updatedTo = $('#updatedToFilter').val();
+
+                    var rowUpdatedAt = data[16] || ''; // Updated At column
+
+                    // Updated date range filter
+                    if (updatedFrom || updatedTo) {
+                        var updatedDate = '';
+                        if (rowUpdatedAt) {
+                            var dateTimeParts = rowUpdatedAt.split(' ');
+                            if (dateTimeParts.length >= 1) {
+                                updatedDate = dateTimeParts[0];
+                            }
+                        }
+
+                        if (updatedFrom && updatedDate && updatedDate < updatedFrom) {
+                            return false;
+                        }
+
+                        if (updatedTo && updatedDate && updatedDate > updatedTo) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+            );
+
+            // Filter event handlers
+            $('#updatedFromFilter, #updatedToFilter').on('change', function () {
+                table.draw();
+            });
+
+            // Reset filters
+            $('#resetFilters').on('click', function () {
+                $('#updatedFromFilter').val('');
+                $('#updatedToFilter').val('');
+                table.search('').draw();
+            });
+        });
+    </script>
 
 
 

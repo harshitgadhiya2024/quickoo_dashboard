@@ -37,6 +37,54 @@
     <!-- Helpers -->
     <script src="/static/assets/vendor/js/helpers.js"></script>
     <script src="/static/assets/js/config.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs5/1.13.6/dataTables.bootstrap5.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <style>
+        .dataTables_wrapper {
+            padding: 20px;
+        }
+
+        .filter-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            margin-top: 20px;
+            padding-left: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #6c757d;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            min-width: 200px;
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+
+        .btn-reset {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
 
 </head>
 
@@ -176,9 +224,25 @@
                                     data-bs-toggle="modal" data-bs-target="#addVender"> Add Vender </button>
                             </div>
                             <div class="card-body">
+                                <div class="filter-section">
+                                    <div class="filter-row">
+                                        <div class="filter-group">
+                                            <label for="updatedFromFilter">Updated From</label>
+                                            <input type="date" id="updatedFromFilter"
+                                                class="form-control form-control-sm">
+                                        </div>
+                                        <div class="filter-group">
+                                            <label for="updatedToFilter">Updated To</label>
+                                            <input type="date" id="updatedToFilter"
+                                                class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                    <button id="resetFilters" class="btn btn-secondary btn-reset">Reset
+                                        Filters</button>
+                                </div>
                                 {% if is_data %}
-                                <div class="table-responsive text-nowrap" style="height: 440px; overflow-y: auto;">
-                                    <table class="table table-bordered">
+                                <div class="table-responsive text-nowrap">
+                                    <table id="vendorTable" class="table table-striped table-hover">
                                         <thead>
                                             <tr class="text-nowrap">
                                                 <th>ID</th>
@@ -223,12 +287,16 @@
                                                                 {% endfor %}
                                                             </ul>
                                                         </div>
-                                                        <button class="btn btn-sm btn-warning edit-vendor-btn"
-                                                            data-bs-toggle="modal" data-bs-target="#editVender" data-email = "{{ data.email }}"
-                                                            data-name="{{ data.vender_name }}" data-id="{{ data.id }}" data-phone="{{ data.phone.replace('+44', '') }}"
-                                                            data-vat="{{ data.vat_no }}" data-tax="{{ data.tax.replace('%', '') }}">
+                                                        <button class="btn btn-sm btn-warning edit-vendor-btn"  style="margin-right: 10px;"
+                                                            data-bs-toggle="modal" data-bs-target="#editVender"
+                                                            data-email="{{ data.email }}"
+                                                            data-name="{{ data.vender_name }}" data-id="{{ data.id }}"
+                                                            data-phone="{{ data.phone.replace('+31', '') }}"
+                                                            data-vat="{{ data.vat_no }}"
+                                                            data-tax="{{ data.tax.replace('%', '') }}">
                                                             <i class="menu-icon tf-icons bx bx-edit"></i>Edit
                                                         </button>
+                                                        <a href="/delete-vendor?id={{data.id}}" class="btn btn-danger"><i class="menu-icon tf-icons bx bx-trash"></i>Delete</a>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -293,7 +361,7 @@
                                 <label class="form-label" for="modalEditUserPhone">Phone Number <span
                                         style="color: red; font-size: 18px;">*</span></label>
                                 <div class="input-group input-group-merge">
-                                    <span class="input-group-text">+44</span>
+                                    <span class="input-group-text">+31</span>
                                     <input type="text" id="phone" name="phone" class="form-control phone-number-mask"
                                         placeholder="202 555 0111" required />
                                 </div>
@@ -303,7 +371,7 @@
                                         style="color: red; font-size: 18px;">*</span></label>
                                 <input type="text" id="email" name="email" class="form-control"
                                     placeholder="example@domain.com" required />
-                            </div>  
+                            </div>
                             <div class="col-12 col-md-12">
                                 <label class="form-label" for="vatno">VAT No. <span
                                         style="color: red; font-size: 18px;">*</span></label>
@@ -350,9 +418,9 @@
                                 <label class="form-label" for="modalEditUserPhone">Phone Number <span
                                         style="color: red; font-size: 18px;">*</span></label>
                                 <div class="input-group input-group-merge">
-                                    <span class="input-group-text">+44</span>
-                                    <input type="text" id="editphone" name="phone" class="form-control phone-number-mask"
-                                        placeholder="202 555 0111" required />
+                                    <span class="input-group-text">+31</span>
+                                    <input type="text" id="editphone" name="phone"
+                                        class="form-control phone-number-mask" placeholder="202 555 0111" required />
                                 </div>
                             </div>
                             <div class="col-12 col-md-6">
@@ -442,7 +510,7 @@
                     var phone = button.getAttribute("data-phone");
                     taxvalue = parseInt(taxvalue)
                     console.log(name, vat, taxvalue);
-                    
+
 
                     // Populate modal form
                     document.getElementById("editvendername").value = name;
@@ -467,6 +535,113 @@
     <script src="/static/assets/vendor/libs/i18n/i18n.js"></script>
     <script src="/static/assets/vendor/libs/typeahead-js/typeahead.js"></script>
     <script src="/static/assets/vendor/js/menu.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net/1.13.6/jquery.dataTables.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs5/1.13.6/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Check if DataTables is loaded
+            if (typeof $.fn.DataTable === 'undefined') {
+                console.error('DataTables not loaded properly');
+                return;
+            }
+
+            // Initialize DataTable
+            var table = $('#vendorTable').DataTable({
+                "pageLength": 10,
+                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                "order": [[0, "desc"]], // Sort by ID descending
+                "responsive": true,
+                "autoWidth": false,
+                "columnDefs": [
+                    {
+                        "targets": [2], // Email column
+                        "width": "180px"
+                    },
+                    {
+                        "targets": [3], // Mobile column
+                        "width": "140px"
+                    },
+                    {
+                        "targets": [4], // VAT column
+                        "width": "120px"
+                    },
+                    {
+                        "targets": [5], // Tax column
+                        "width": "80px"
+                    },
+                    {
+                        "targets": [6, 7], // Created/Updated columns
+                        "width": "160px"
+                    },
+                    {
+                        "targets": [8], // Actions column
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "200px"
+                    }
+                ],
+                "language": {
+                    "search": "Search vendors:",
+                    "lengthMenu": "Show _MENU_ vendors",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ vendors",
+                    "infoEmpty": "No vendors found",
+                    "infoFiltered": "(filtered from _MAX_ total vendors)",
+                    "paginate": {
+                        "first": "First",
+                        "last": "Last",
+                        "next": "Next",
+                        "previous": "Previous"
+                    }
+                }
+            });
+
+            // Custom filtering function
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var updatedFrom = $('#updatedFromFilter').val();
+                    var updatedTo = $('#updatedToFilter').val();
+
+                    var rowUpdatedAt = data[7] || ''; // Updated At column
+
+                    // Updated date range filter
+                    if (updatedFrom || updatedTo) {
+                        var updatedDate = '';
+                        if (rowUpdatedAt) {
+                            var dateTimeParts = rowUpdatedAt.split(' ');
+                            if (dateTimeParts.length >= 1) {
+                                updatedDate = dateTimeParts[0];
+                            }
+                        }
+
+                        if (updatedFrom && updatedDate && updatedDate < updatedFrom) {
+                            return false;
+                        }
+
+                        if (updatedTo && updatedDate && updatedDate > updatedTo) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+            );
+
+            // Filter event handlers
+            $('#updatedFromFilter, #updatedToFilter').on('change', function () {
+                table.draw();
+            });
+
+            // Reset filters
+            $('#resetFilters').on('click', function () {
+                $('#updatedFromFilter').val('');
+                $('#updatedToFilter').val('');
+                table.search('').draw();
+            });
+        });
+    </script>
 
     <!-- endbuild -->
 

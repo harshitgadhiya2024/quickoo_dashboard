@@ -71,15 +71,15 @@ class UKDataValidator:
 
     @staticmethod
     def validate_dutch_phone(phone):
-        """Validate Dutch phone number format (for existing +44 numbers)"""
+        """Validate Dutch phone number format (for existing +31 numbers)"""
         try:
             if not phone or not phone.strip():
                 return False, "Phone number is required"
 
             phone = phone.strip()
 
-            # If it starts with +44, validate as Dutch number
-            if phone.startswith('+44') or phone.startswith('0031'):
+            # If it starts with +31, validate as Dutch number
+            if phone.startswith('+31') or phone.startswith('0031'):
                 parsed_number = phonenumbers.parse(phone, "NL")
                 if phonenumbers.is_valid_number(parsed_number):
                     formatted_number = phonenumbers.format_number(parsed_number,
