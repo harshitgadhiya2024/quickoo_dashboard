@@ -486,6 +486,21 @@ def invoice_details():
         print(f"{datetime.now()}: Error in invoice generation route: {str(e)}")
         return render_template("invoice_generation.html")
 
+@app.route("/contact_details", methods=["GET", "POST"])
+@token_required
+def contact_details():
+    try:
+        all_booking_data = list(mongoOperation().get_all_data_from_coll(client, "quickoouk", "contact_forms"))[::-1]
+        updated_data = []
+        for data in all_booking_data:
+            del data["_id"]
+            updated_data.append(data)
+        return render_template("contact-form-details.html", all_data=updated_data)
+
+    except Exception as e:
+        print(f"{datetime.now()}: Error in contact details route: {str(e)}")
+        return {"error": "Failed to contact details"}
+
 @app.route("/assign-driver", methods=["GET"])
 @token_required
 def assign_driver():
